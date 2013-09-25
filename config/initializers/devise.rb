@@ -237,8 +237,12 @@ Devise.setup do |config|
   
   API_KEYS = YAML::load_file("#{Rails.root}/config/api_keys.yml")[Rails.env] if Rails.env.development?
   
-  config.omniauth :google_oauth2, API_KEYS['google_api_key'], API_KEYS['google_api_secret'], { access_type: "offline", approval_prompt: "" }
-  config.omniauth :twitter, API_KEYS['twitter_api_key'], API_KEYS['twitter_api_secret']
+  config.omniauth :google_oauth2, API_KEYS['google_api_key'], API_KEYS['google_api_secret'], { access_type: "offline", approval_prompt: "" } if Rails.env.development?
+  config.omniauth :twitter, API_KEYS['twitter_api_key'], API_KEYS['twitter_api_secret'] if Rails.env.development?
+  
+  config.omniauth :google_oauth2, ENV['google_api_key'], ENV['google_api_secret'], { access_type: "offline", approval_prompt: "" } if Rails.env.production?
+  config.omniauth :twitter, ENV['twitter_api_key'], ENV['twitter_api_secret'] if Rails.env.production?
+  
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
