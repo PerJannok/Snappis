@@ -7,10 +7,13 @@ class User
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  devise :omniauthable, :omniauth_providers => [:google_oauth2, :twitter]
 
   ## Database authenticatable
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
+  
+  field :provider, :type => String, :default => "none"
 
   validates_presence_of :email
   validates_presence_of :encrypted_password
@@ -46,5 +49,48 @@ class User
   index({ email: 1 }, { unique: true, background: true })
   field :name, :type => String
   validates_presence_of :name
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
+  
+  has_many :authentications
+  
+  attr_accessible :name, :provider, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
+
+  
+    def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
+    data = access_token.info
+    user = User.where(:email => data["email"]).first
+    
+#    Rails.logger.info("######## google check provider...")
+#    Rails.logger.info(access_token["provider"].to_yaml)
+#    Rails.logger.info("########")
+
+    unless user
+        user = User.create(name: data["name"],
+	    		   email: data["email"],
+	    		   provider: access_token["provider"],
+	    		   password: Devise.friendly_token[0,20]
+	    		  )
+    end
+    user
+  end
+
+  def self.find_for_twitter_oauth2(access_token, signed_in_resource=nil)
+    data = access_token.info
+    
+#    Rails.logger.info("######## user check provider...")
+#    Rails.logger.info(access_token.to_yaml)
+#    Rails.logger.info("######## user check if exist.")
+    user = User.where(:provider => access_token["provider"], :name => data["name"]).first
+
+
+    unless user
+        #create with a default email since it can not be empty, 
+        #TODO: remove presence_of validation, but needs to handle email check at sign up
+        user = User.create(name: data["name"], provider: access_token["provider"],
+                        email: "default@defaulttwitter.com",
+                        password: Devise.friendly_token[0,20])                              
+    end
+    
+    
+    user
+  end
 end

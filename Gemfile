@@ -8,6 +8,11 @@ group :assets do
 end
 gem 'jquery-rails'
 gem 'devise'
+gem 'omniauth'
+gem 'twitter'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-twitter'
+gem "nifty-generators"
 gem 'figaro'
 gem 'mongoid'
 group :development do
@@ -30,3 +35,5 @@ group :test do
   gem 'launchy'
   gem 'mongoid-rspec'
 end
+
+gem "mocha", :group => :test
