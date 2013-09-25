@@ -12,6 +12,7 @@ gem 'omniauth'
 gem 'twitter'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
+gem "authbuttons-rails"
 gem "nifty-generators"
 gem 'figaro'
 gem 'mongoid'

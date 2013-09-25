@@ -18,8 +18,24 @@
   <%= link_to "Didn't receive unlock instructions?", new_unlock_path(resource_name) %><br />
 <% end -%>
 
+
+Or sign in with:<br />
+
+<%- if false %>
 <%- if devise_mapping.omniauthable? %>
   <%- resource_class.omniauth_providers.each do |provider| %>
     <%= link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(resource_name, provider) %><br />
   <% end -%>
 <% end -%>
+<% end -%>
+
+<a href="/users/auth/twitter" class="auth_provider">
+  <%= image_tag "twitter_32.png", :size => "32x32", :alt => "Twitter" %>
+</a>
+
+<a href="/users/auth/google_oauth2" class="auth_provider">
+  <%= image_tag "google_32.png", :size => "32x32", :alt => "Google" %>
+</a>
+
+
+
