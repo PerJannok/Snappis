@@ -235,9 +235,10 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   
-  config.omniauth :google_oauth2, "927788412593-2drjo1e5fhgs44o0s1vsoe29masnahip.apps.googleusercontent.com", "EoCSu-R1SnMEVu7ZpfiDbxTY", { access_type: "offline", approval_prompt: "" }
-#  config.omniauth :twitter, "VXypafRswzbLy8MMmUTTybxvFVdQSOF2yLTN7rCzY", "TrjO8LUtcajoex2YeSNwWg"
-  config.omniauth :twitter, "TrjO8LUtcajoex2YeSNwWg", "VXypafRswzbLy8MMmUTTybxvFVdQSOF2yLTN7rCzY"
+  API_KEYS = YAML::load_file("#{Rails.root}/config/api_keys.yml")[Rails.env]
+  
+  config.omniauth :google_oauth2, API_KEYS['google_api_key'], API_KEYS['google_api_secret'], { access_type: "offline", approval_prompt: "" }
+  config.omniauth :twitter, API_KEYS['twitter_api_key'], API_KEYS['twitter_api_secret']
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
