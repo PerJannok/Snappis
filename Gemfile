@@ -5,9 +5,6 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
-  gem 'therubyracer'
-  gem 'less-rails'
-  gem 'twitter-bootstrap-rails'
 end
 gem 'jquery-rails'
 gem 'devise'
@@ -19,6 +16,10 @@ gem "authbuttons-rails"
 gem "nifty-generators"
 gem 'figaro'
 gem 'mongoid'
+
+gem 'therubyracer'
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
 
 group :development do
   gem 'better_errors'
