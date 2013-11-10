@@ -1,0 +1,431 @@
+<div id="googlemap" style="width:100%; height: 360px"></div>
+<input type="button" value="Find me!" onclick="findMe();" />
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
+
+<script type="text/javascript">	
+<!--
+
+// Centering the map on startup at coord found when searching for 'Boston'
+// '42.35843'
+// '-71.05977'
+var showLat = "42.35843";
+var showLong = "-71.05977";
+
+var defaultZoom = 16;
+
+var markersArray = [];
+
+var place;
+var photos;
+
+
+
+// create map and add controls
+var mapOptions = {
+	center: new google.maps.LatLng(showLat, showLong),
+	zoom: defaultZoom,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	scrollwheel: false,
+	scaleControl: false
+};
+
+var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
+
+
+var infowindow = new google.maps.InfoWindow();
+
+google.maps.event.addListener(map, 'bounds_changed', function() {
+	var bounds = map.getBounds();
+	//console.log(bounds.toString());
+
+	var locations = [{lat: 42.36025341654691, lng: -71.06285990478517, desc: "test1" },
+			   {lat: 42.3593525681597, lng: -71.06435787747614, desc: "test2" },
+			   {lat: 42.35618132947636, lng: -71.06238377164118, desc: "test3" },
+			   {lat: 42.363221262628834, lng: -71.0637570626568, desc: "test4" }
+			   ];
+	var i = 0, maxLoc = locations.length;
+
+	for(i=0; i < maxLoc; i++) {
+		var myLatlng = new google.maps.LatLng(locations[i].lat,locations[i].lng);
+		//console.log(myLatlng.toString());
+		
+		if (bounds.contains(myLatlng) ){
+			// marker is within bounds
+			//console.log("add: " + locations[i].desc);
+			placeMarker(myLatlng);
+		} else {
+			//console.log("remove: " + locations[i].desc);
+		}
+	}
+ });
+
+
+showMap(showLat, showLong);
+
+function isNumeric(num){
+    return !isNaN(num)
+}
+
+
+function fillPlaceForm(results) {
+
+	var address = '';
+	var address = results.address_components;
+
+//	for(var index in address) {
+//		alert( index + " : " + address[index].long_name + "\n");
+//	}
+						
+//0 = 250							1-63							New Chardon Street	40								11
+//1 = First Avenue		Cambridge Street	Downtown						Swedenborgsgatan	Lasarettsgatan
+//2 = Thompson Square										Boston							Stockholm					Gällivare
+//3 = Charlestown			Downtown					Suffolk							Stockholm County	Norrbotten County
+//4 = Boston					Boston						Massachusetts				Sweden						Sweden
+//5 = Suffolk					Suffolk						United States				11827							98231
+//6 = Massachusetts		Massachusetts			02114								Stockholm					Gällivare
+//7 = United States		United States
+//8 = 02129						02114
+
+
+//0 = 250							Charlestown Navy Yard		47
+//1 = Binney Street		Charlestown							Huntington Avenue
+//2 = East Cambridge	MA											Boston
+//3 = Cambridge				US											MA
+//4 = Middlesex				02129										US
+//5 = MAssachusetss														02116
+//6 = United STates
+//7 = 02142
+						
+	var lastIsZIPcode = false;
+	var lastIsCity = false;
+
+	if (address[address.length - 1]) {
+		var data = address[address.length - 1].long_name;
+	
+		if (isNumeric(data))
+			lastIsZIPcode = true;
+		else
+			lastIsCity = true;
+	}
+
+	if (lastIsZIPcode) {
+ 		zipcode = address[address.length - 1].long_name;
+ 		
+		if (address[address.length - 2]) {
+			var country = address[address.length - 2].long_name;
+		};
+ 		
+		if (address[address.length - 3]) {
+			var stateLong = address[address.length - 3].long_name;
+			var stateShort = address[address.length - 3].short_name;
+		};
+
+		if (address.length == 9) {
+			var streetnumber = address[0].long_name;
+			var streetname = address[1].long_name;
+			var neighborhood = address[address.length - 7].long_name;
+			var city = address[address.length - 6].long_name;
+			var greatercity = address[address.length - 5].long_name;
+			var district = address[address.length - 4].long_name;
+		} else if (address.length == 8) {
+			var streetnumber = address[0].long_name;
+			var streetname = address[1].long_name;
+			var city = address[address.length - 5].long_name;
+			var neighborhood = address[address.length - 6].long_name;
+		} else if (address.length == 7) {
+			var streetname = address[0].long_name;
+			var city = address[address.length - 5].long_name;
+			var neighborhood = address[address.length - 6].long_name;
+		} else if (address.length == 6) {
+			var streetnumber = address[0].long_name;
+			var streetname = address[1].long_name;
+			var city = address[address.length - 4].long_name;
+		} else if (address.length == 5) {
+			var streetname = address[0].long_name;
+			var city = address[address.length - 4].long_name;
+		}
+	};
+
+	if (lastIsCity) {
+ 		zipcode = address[address.length - 2].long_name;
+ 		
+		if (address[address.length - 3]) {
+			var country = address[address.length - 3].long_name;
+		};
+ 		
+		if (address[address.length - 4]) {
+			var stateLong = address[address.length - 4].long_name;
+			var stateShort = address[address.length - 4].short_name;
+		};
+
+		var streetnumber = address[0].long_name;
+		var streetname = address[1].long_name;
+		var city = address[address.length - 5].long_name;
+	};
+									
+//	alert("Zip: " + zipcode + "\ncountry: " + country + "\ncity: " + city + "\ndistrict: " + district + "\nstreetnumber: " + streetnumber + "\nstreetname: " + streetname + "\nstateLong: " + stateLong + "\nstateShort: " + stateShort);
+		
+	document.getElementById('location_address').value = results.formatted_address;
+	document.getElementById('location_postcode').value = zipcode;
+	if (district) {
+		document.getElementById('location_district').value = district;	
+	}
+	document.getElementById('location_city').value = city;
+	document.getElementById('location_country').value = country;
+
+}
+
+
+function findMe() {
+	if(navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			//alert('findMe(): pos found');
+			document.getElementById('location_lat').value = position.coords.latitude;
+			document.getElementById('location_lng').value = position.coords.longitude;
+			
+			var geocoder = new google.maps.Geocoder();
+			var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			geocoder.geocode( { 'latLng': latLng}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					if (results[0]) {
+						
+						fillPlaceForm(results[0]);
+						
+					}else{
+						alert('error GeocoderStatus');
+					}
+				}else{
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			});
+			
+		showMap(position.coords.latitude, position.coords.longitude);
+
+  	}, function() {
+			alert('We couldn\'t find your position.');
+  	});
+	} else {
+  	alert('Your browser doesn\'t support geolocation.');
+	}
+}
+
+function placeMarker(location) {
+    var marker = new google.maps.Marker({
+    	position: location,
+		draggable: false,
+    	map: map
+ 	});
+	
+	markersArray.push(marker);
+}
+
+// This is the function to animate the marker after dropping it.
+function toggleBounce() {
+	if (marker.getAnimation() != null) {
+  		marker.setAnimation(null);
+	} else {
+		marker.setAnimation(google.maps.Animation.BOUNCE);
+	}
+};
+
+
+// Removes the overlays from the map, but keeps them in the array
+function clearOverlays() {
+  if (markersArray) {
+    for (i in markersArray) {
+      markersArray[i].setMap(null);
+    }
+  }
+}
+
+// Shows any overlays currently in the array
+function showOverlays() {
+  if (markersArray) {
+    for (i in markersArray) {
+      markersArray[i].setMap(map);
+    }
+  }
+}
+
+// Deletes all markers in the array by removing references to them
+function deleteOverlays() {
+  if (markersArray) {
+    for (i in markersArray) {
+      markersArray[i].setMap(null);
+    }
+    markersArray.length = 0;
+  }
+}
+
+function showMap(showLat,showLong) {
+
+	var geocoder = new google.maps.Geocoder();
+	var latLng;
+	
+
+	// set center point of map to be of the Marker or the Default City
+	var centrePoint = new google.maps.LatLng(showLat, showLong);
+	map.setCenter(centrePoint);
+	map.setZoom(defaultZoom);
+
+	google.maps.event.addListener( map, "click", function( evt ) {
+		placeMarker(evt.latLng);		
+		var myLatLng = evt.latLng;
+      	var lat = myLatLng.lat();
+      	var lng = myLatLng.lng();
+      	var latlng = new google.maps.LatLng(lat, lng);
+
+		var centrePoint = new google.maps.LatLng(lat, lng);
+		map.setCenter(centrePoint);
+
+		document.getElementById("location_lat").value = lat;
+		document.getElementById("location_lng").value = lng;
+
+		latLng = new google.maps.LatLng(lat, lng);
+		geocoder.geocode( { 'latLng': latLng}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+	  			if (results[0]) {
+	  			
+	  				//when clicking on map
+		  			fillPlaceForm(results[0]);
+	  			
+	  			}else{
+						alert('fel');
+					}
+			} else {
+	  			alert("Geocode was not successful for the following reason: " + status);
+			}
+		});	
+	});
+
+
+	document.getElementById("location_lat").value = showLat;
+	document.getElementById("location_lng").value = showLong;
+
+	latLng = new google.maps.LatLng(showLat, showLong);
+	geocoder.geocode( { 'latLng': latLng}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+  			if (results[0]) {
+
+					//start
+  				fillPlaceForm(results[0]);
+
+  			} else {
+					alert('fel');
+				}
+		}else{
+  			alert("Geocode was not successful for the following reason: " + status);
+		}
+	});
+	
+	marker = new google.maps.Marker({
+		map: map,
+		draggable: true,
+		animation: google.maps.Animation.DROP,
+		position: centrePoint
+	});
+	var defaultImage = new google.maps.MarkerImage("http://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+	  new google.maps.Size(71, 71),
+	  new google.maps.Point(0, 0),
+	  new google.maps.Point(17, 34),
+	  new google.maps.Size(35, 35));
+	marker.setIcon(defaultImage);
+	
+	google.maps.event.addListener(marker, 'click', toggleBounce);
+	
+	// Address Autocomplete
+	var input = document.getElementById('location_search');
+	var autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete.bindTo('bounds', map);
+  
+	// add a drag listener to the map
+	google.maps.event.addListener(marker, "dragend", function() {
+		var point = marker.getPosition();
+		map.panTo(point);
+		document.getElementById("location_lat").value = point.lat();
+		document.getElementById("location_lng").value = point.lng();
+
+		latLng = new google.maps.LatLng(point.lat(), point.lng());
+		geocoder.geocode( { 'latLng': latLng}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+	  			if (results[0]) {
+	  				//fill form when clicking on map
+	  				fillPlaceForm(results[0]);
+	  			}else{
+						alert('fel');
+					}
+			}else{
+	  			alert("Geocode was not successful for the following reason: " + status);
+			}
+		});
+		
+		infowindow.close();
+		marker.setIcon(defaultImage);
+	});
+
+	// Autocomplete Listener
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		place = autocomplete.getPlace();
+		marker.setPosition(place.geometry.location);
+		map.panTo(place.geometry.location);
+		map.setZoom(defaultZoom);
+		document.getElementById("location_lat").value = place.geometry.location.lat();
+		document.getElementById("location_lng").value = place.geometry.location.lng();
+
+		// Sets the proper image on the marker. ie. school/hospital marker
+		var image = new google.maps.MarkerImage(
+			place.icon,
+			new google.maps.Size(71, 71),
+			new google.maps.Point(0, 0),
+			new google.maps.Point(17, 34),
+			new google.maps.Size(35, 35));
+		marker.setIcon(image);
+		marker.setPosition(place.geometry.location);
+
+		var address = '';
+		if (place.address_components) {
+		  address = [(place.address_components[0] &&
+		              place.address_components[0].short_name || ', '),
+		             (place.address_components[1] &&
+		              place.address_components[1].short_name || ', '),
+		             (place.address_components[2] &&
+		              place.address_components[2].short_name || '')
+		            ].join(' ');
+		}
+
+		//rating from google: place.rating
+		infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+		infowindow.open(map, marker);
+		
+		//all google places attributes
+		/*
+		var i = 1;
+		var str = '';
+		for (var key in place)
+		{
+    	str += "#: " + i + " key: " + key + " val: " + place[key] + "\n";
+    	i++;
+		}
+		alert(str);
+		*/
+		
+		document.getElementById("location_phone_number").value = place.formatted_phone_number;
+		document.getElementById("location_location_name").value = place.name;
+
+		fillPlaceForm(place);
+		
+		photos = place.photos;
+		$('#place_images').empty();
+		for (var i = 0; i < photos.length; i++) {
+			var url = photos[i].getUrl({maxHeight: "1280", maxWidth: "1280"});
+			$('#place_images').prepend('<img src="' + url + '"/>');
+		}
+	}); 
+}
+
+
+//-->
+</script>
+
+<br />
