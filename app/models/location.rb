@@ -33,6 +33,21 @@ class Location
 	attr_accessible :lat
 	attr_accessible :lng
  
-
+	has_many :ratings
+	#has_many :raters, :through => :ratings, :source => :user
+	
+	def raters
+    User.in(id: ratings.map(&:user_id))
+  end
+  
+  def average_rating
+    @value = 0
+    self.ratings.each do |rating|
+        @value = @value + rating.value
+    end
+    @total = self.ratings.size
+    @value = @value.to_f / @total.to_f
+    @value = 0.0 unless @value.finite?
+	end
 
 end

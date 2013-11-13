@@ -11,4 +11,9 @@ ReviewSite::Application.routes.draw do
   resources :locations
   match '/locations' => 'locations#new'
   
+  resources :rating
+  match '/rating/:id/edit' => 'rating#update'
+  match '/rating/new' => 'rating#create'
+  #match '/rating', to: 'rating#index', via: :post
+  
 end

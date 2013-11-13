@@ -51,17 +51,19 @@ class User
   validates_presence_of :name
   
   has_many :authentications
-  
-  attr_accessible :name, :provider, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
 
+	has_many :ratings
+	#has_many :rated_locations, :through => :ratings, :source => :locations  
+	
+attr_accessible :name, :provider, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
+
+  def rated_locations
+    Location.in(id: ratings.map(&:location_id))
+  end
   
-    def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
+	def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
     data = access_token.info
     user = User.where(:email => data["email"]).first
-    
-#    Rails.logger.info("######## google check provider...")
-#    Rails.logger.info(access_token["provider"].to_yaml)
-#    Rails.logger.info("########")
 
     unless user
         user = User.create(name: data["name"],
@@ -76,11 +78,7 @@ class User
   def self.find_for_twitter_oauth2(access_token, signed_in_resource=nil)
     data = access_token.info
     
-#    Rails.logger.info("######## user check provider...")
-#    Rails.logger.info(access_token.to_yaml)
-#    Rails.logger.info("######## user check if exist.")
     user = User.where(:provider => access_token["provider"], :name => data["name"]).first
-
 
     unless user
         #create with a default email since it can not be empty, 
@@ -89,7 +87,6 @@ class User
                         email: "default@defaulttwitter.com",
                         password: Devise.friendly_token[0,20])                              
     end
-    
     
     user
   end

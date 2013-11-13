@@ -42,11 +42,24 @@ class LocationsController < ApplicationController
   # POST /locations.json
   def create
     @location = Location.new(params[:location])
-
+    
+    if current_user.present?
+    	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :value => params[:star1])
+    	#@rating.location_id = @location.id
+    	#@rating.user_id = current_user.id
+    end
+    
+    #puts params.inspect
+    
     respond_to do |format|
       if @location.save
-        format.html { redirect_to @location, notice: 'Location was successfully created.' }
-        format.json { render json: @location, status: :created, location: @location }
+      	if @rating.save
+		      format.html { redirect_to @location, notice: 'Location was successfully created.' }
+		      format.json { render json: @location, status: :created, location: @location }      	
+      	else
+		      format.html { render action: "new" }
+		      format.json { render json: @rating.errors, status: :unprocessable_entity }      	
+      	end
       else
         format.html { render action: "new" }
         format.json { render json: @location.errors, status: :unprocessable_entity }

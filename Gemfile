@@ -17,6 +17,8 @@ gem "nifty-generators"
 gem 'figaro'
 gem 'mongoid'
 
+gem 'jquery-star-rating-rails'
+
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'

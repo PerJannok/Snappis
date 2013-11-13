@@ -9,6 +9,11 @@
   </p>
 
   <p>
+    <b>Location name:</b>
+    <%= @location.location_name %>
+  </p>
+
+  <p>
     <b>City:</b>
     <%= @location.city %>
   </p>
@@ -21,6 +26,52 @@
   <p>
     <b>Country:</b>
     <%= @location.country %>
+  </p>
+
+  <p>
+    <b>Your rating:</b><br>
+    <% if current_user.present? %>
+    	<!-- user logged in -->
+    	<% if !Rating.where(:user_id => current_user.id).blank? %>
+				<% if !Rating.where(:user_id => current_user.id, :location_id => @location.id).blank? %>
+		  		<!-- user has rated this location earlier -->
+		  		<% @rating = current_user.ratings.where(location_id: @location.id).first %>
+				 	<%= form_for :rating, :url => edit_rating_path(:id => @rating.id) do |f| %>
+						<% (1..5).each do |i| %>
+							<% if i == current_user_rating %>
+								<input name="star2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% else %>
+								<input name="star2" type="radio" class="star" value="<%= i %>"/>
+							<% end %>
+						<% end %>
+						<%= f.submit "Update" %>
+					<% end %>
+				<% else %>
+		  		<!-- user has NOT rated this location -->
+				 	<%= form_for :rating, :url => new_rating_path(:location_id => @location.id) do |f| %>
+						<% (1..5).each do |i| %>
+							<% if i == current_user_rating %>
+								<input name="star2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% else %>
+								<input name="star2" type="radio" class="star" value="<%= i %>"/>
+							<% end %>
+						<% end %>
+						<%= f.submit "Update" %>		  
+					<% end %>
+				<% end %>
+	    <% else %>
+				<!-- user logged in but has no ratings-->
+				Go ahead and rate this location!				
+	    <% end %>
+    <% else %>
+			<!-- user not logged in -->
+			If you login you can rate this location!				
+    <% end %>
+  </p>
+
+  <p>
+    <b>Avg rating:</b>
+    <%= @location.average_rating %>
   </p>
 
   <p>
