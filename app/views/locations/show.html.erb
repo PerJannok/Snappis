@@ -24,7 +24,7 @@
   </p>
 
   <p>
-    <b>Your rating:</b><br>
+    <b>Your Cat1 rating:</b><br>
     <% if current_user.present? %>
     	<!-- user logged in -->
     	<% if !Rating.where(:user_id => current_user.id).blank? %>
@@ -33,10 +33,10 @@
 		  		<% @rating = current_user.ratings.where(location_id: @location.id).first %>
 				 	<%= form_for :rating, :url => edit_rating_path(:id => @rating.id) do |f| %>
 						<% (1..5).each do |i| %>
-							<% if i == current_user_rating %>
-								<input name="star2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% if i == current_user_cat1_rating %>
+								<input name="starCat1" type="radio" class="star" checked="checked" value="<%= i %>"/>
 							<% else %>
-								<input name="star2" type="radio" class="star" value="<%= i %>"/>
+								<input name="starCat1" type="radio" class="star" value="<%= i %>"/>
 							<% end %>
 						<% end %>
 						<%= f.submit "Update" %>
@@ -45,10 +45,10 @@
 		  		<!-- user has NOT rated this location -->
 				 	<%= form_for :rating, :url => new_rating_path(:location_id => @location.id) do |f| %>
 						<% (1..5).each do |i| %>
-							<% if i == current_user_rating %>
-								<input name="star2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% if i == current_user_cat1_rating %>
+								<input name="starCat1" type="radio" class="star" checked="checked" value="<%= i %>"/>
 							<% else %>
-								<input name="star2" type="radio" class="star" value="<%= i %>"/>
+								<input name="starCat1" type="radio" class="star" value="<%= i %>"/>
 							<% end %>
 						<% end %>
 						<%= f.submit "Update" %>		  
@@ -65,8 +65,54 @@
   </p>
 
   <p>
-    <b>Avg rating:</b>
-    <%= @location.average_rating %>
+    <b>Your Cat2 rating:</b><br>
+    <% if current_user.present? %>
+    	<!-- user logged in -->
+    	<% if !Rating.where(:user_id => current_user.id).blank? %>
+				<% if !Rating.where(:user_id => current_user.id, :location_id => @location.id).blank? %>
+		  		<!-- user has rated this location earlier -->
+		  		<% @rating = current_user.ratings.where(location_id: @location.id).first %>
+				 	<%= form_for :rating, :url => edit_rating_path(:id => @rating.id) do |f| %>
+						<% (1..5).each do |i| %>
+							<% if i == current_user_cat2_rating %>
+								<input name="starCat2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% else %>
+								<input name="starCat2" type="radio" class="star" value="<%= i %>"/>
+							<% end %>
+						<% end %>
+						<%= f.submit "Update" %>
+					<% end %>
+				<% else %>
+		  		<!-- user has NOT rated this location -->
+				 	<%= form_for :rating, :url => new_rating_path(:location_id => @location.id) do |f| %>
+						<% (1..5).each do |i| %>
+							<% if i == current_user_cat2_rating %>
+								<input name="starCat2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% else %>
+								<input name="starCat2" type="radio" class="star" value="<%= i %>"/>
+							<% end %>
+						<% end %>
+						<%= f.submit "Update" %>		  
+					<% end %>
+				<% end %>
+	    <% else %>
+				<!-- user logged in but has no ratings-->
+				Go ahead and rate this location!				
+	    <% end %>
+    <% else %>
+			<!-- user not logged in -->
+			If you login you can rate this location!				
+    <% end %>
+  </p>
+
+  <p>
+    <b>Avg Cat1 rating:</b>
+    <%= @location.average_cat1_rating %>
+  </p>
+
+  <p>
+    <b>Avg Cat2 rating:</b>
+    <%= @location.average_cat2_rating %>
   </p>
 
   <p>

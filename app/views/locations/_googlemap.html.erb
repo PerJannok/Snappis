@@ -3,6 +3,13 @@
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
 
+<style type="text/css">
+	/** FIX for Bootstrap and Google Maps Info window styes problem **/
+	img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+	max-width: none;
+}
+</style>
+
 <script type="text/javascript">	
 <!--
 
@@ -35,18 +42,18 @@ var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
 
 var infowindow = new google.maps.InfoWindow();
 
+
 google.maps.event.addListener(map, 'bounds_changed', function() {
 	var bounds = map.getBounds();
 	//console.log(bounds.toString());
 	
 	<% @stored_locations.each do |entry| %>
-    // Create the LatLng
+		// Create the LatLng
    	var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
 
 		if (bounds.contains(myLatlng) ){
 			// marker is within bounds
-			//console.log("add: " + locations[i].desc);
-			placeMarker(myLatlng);
+			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.average_cat1_rating %>");
 		} else {
 			//console.log("remove: " + locations[i].desc);
 		}
@@ -55,7 +62,7 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
  });
 
 
-showMap(showLat, showLong);
+showMap(showLat, showLong, false);
 
 function isNumeric(num){
     return !isNaN(num)
@@ -194,7 +201,7 @@ function findMe() {
 				}
 			});
 			
-		showMap(position.coords.latitude, position.coords.longitude);
+		showMap(position.coords.latitude, position.coords.longitude, true);
 
   	}, function() {
 			alert('We couldn\'t find your position.');
@@ -204,15 +211,26 @@ function findMe() {
 	}
 }
 
-function placeMarker(location) {
-    var marker = new google.maps.Marker({
-    	position: location,
+function placeMarker(location, name, avgrating) {
+	var markerToPlace = new google.maps.Marker({
+		position: location,
 		draggable: false,
-    	map: map
+		title: name,
+//    zIndex: sites[3],
+//    html: sites[4],
+		map: map
  	});
-	
-	markersArray.push(marker);
+  
+  var contentString = name + '<br>' + avgrating;
+ 	
+ 	google.maps.event.addListener(markerToPlace, 'click', function() {
+    infowindow.setContent(contentString);
+    infowindow.open(map,this);
+  });
+  
+	markersArray.push(markerToPlace);
 }
+
 
 // This is the function to animate the marker after dropping it.
 function toggleBounce() {
@@ -252,7 +270,7 @@ function deleteOverlays() {
   }
 }
 
-function showMap(showLat,showLong) {
+function showMap(showLat,showLong,addMarker) {
 
 	var geocoder = new google.maps.Geocoder();
 	var latLng;
@@ -263,6 +281,8 @@ function showMap(showLat,showLong) {
 	map.setCenter(centrePoint);
 	map.setZoom(defaultZoom);
 
+	/*
+	//adds a marker when clicking in map
 	google.maps.event.addListener( map, "click", function( evt ) {
 		placeMarker(evt.latLng);		
 		var myLatLng = evt.latLng;
@@ -292,7 +312,7 @@ function showMap(showLat,showLong) {
 			}
 		});	
 	});
-
+	*/
 
 	document.getElementById("location_lat").value = showLat;
 	document.getElementById("location_lng").value = showLong;
@@ -333,7 +353,7 @@ function showMap(showLat,showLong) {
 	var autocomplete = new google.maps.places.Autocomplete(input);
 	autocomplete.bindTo('bounds', map);
   
-	// add a drag listener to the map
+	// add a drag listener to the mapmarker
 	google.maps.event.addListener(marker, "dragend", function() {
 		var point = marker.getPosition();
 		map.panTo(point);
@@ -389,7 +409,7 @@ function showMap(showLat,showLong) {
 		}
 
 		//rating from google: place.rating
-		infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+		infowindow.setContent('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
 		infowindow.open(map, marker);
 		
 		//all google places attributes

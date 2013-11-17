@@ -3,12 +3,12 @@ class RatingController < ApplicationController
   before_filter :authenticate_user!
 
   def create
-    puts "create new rating!"
-    puts params.inspect
+    #puts "create new rating!"
+    #puts params.inspect
 
     @location = Location.find(params[:location_id])
     
-   	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :value => params[:star2])
+   	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat2value => params[:starCat2])
     
     
     respond_to do |format|
@@ -26,7 +26,8 @@ class RatingController < ApplicationController
 		@rating = Rating.find(params[:id])
 		@location = Location.find(@rating.location_id)
 		
-		@rating.value = params[:star2]
+		@rating.Cat1value = params[:starCat1]
+		@rating.Cat2value = params[:starCat2]
 		    	
 		#puts "update rating"
 		#puts params.inspect

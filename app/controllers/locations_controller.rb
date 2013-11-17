@@ -48,9 +48,7 @@ class LocationsController < ApplicationController
     @location = Location.new(params[:location])
     
     if current_user.present?
-    	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :value => params[:star1])
-    	#@rating.location_id = @location.id
-    	#@rating.user_id = current_user.id
+    	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat2value => params[:starCat2])
     end
     
     #puts params.inspect

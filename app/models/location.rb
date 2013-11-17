@@ -40,18 +40,36 @@ class Location
     User.in(id: ratings.map(&:user_id))
   end
   
-	def average_rating
+	def average_cat1_rating
 		@value = 0
 		self.ratings.each do |rating|
-			if !rating.value.nil?
-				@value = @value + rating.value
+			if !rating.Cat1value.nil?
+				@value = @value + rating.Cat1value
 			end
 		end
 		@total = self.ratings.size
 		if !@total.nil?
 			@value = @value.to_f / @total.to_f
+			puts @value
 			@value = 0.0 unless @value.finite?
 		end
+		return @value
+	end
+
+	def average_cat2_rating
+		@value = 0
+		self.ratings.each do |rating|
+			if !rating.Cat2value.nil?
+				@value = @value + rating.Cat2value
+			end
+		end
+		@total = self.ratings.size
+		if !@total.nil?
+			@value = @value.to_f / @total.to_f
+			puts @value
+			@value = 0.0 unless @value.finite?
+		end
+		return @value
 	end
 
 end
