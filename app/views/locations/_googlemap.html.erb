@@ -38,18 +38,11 @@ var infowindow = new google.maps.InfoWindow();
 google.maps.event.addListener(map, 'bounds_changed', function() {
 	var bounds = map.getBounds();
 	//console.log(bounds.toString());
+	
+	<% @stored_locations.each do |entry| %>
+    // Create the LatLng
+   	var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
 
-	var locations = [{lat: 42.36025341654691, lng: -71.06285990478517, desc: "test1" },
-			   {lat: 42.3593525681597, lng: -71.06435787747614, desc: "test2" },
-			   {lat: 42.35618132947636, lng: -71.06238377164118, desc: "test3" },
-			   {lat: 42.363221262628834, lng: -71.0637570626568, desc: "test4" }
-			   ];
-	var i = 0, maxLoc = locations.length;
-
-	for(i=0; i < maxLoc; i++) {
-		var myLatlng = new google.maps.LatLng(locations[i].lat,locations[i].lng);
-		//console.log(myLatlng.toString());
-		
 		if (bounds.contains(myLatlng) ){
 			// marker is within bounds
 			//console.log("add: " + locations[i].desc);
@@ -57,7 +50,8 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
 		} else {
 			//console.log("remove: " + locations[i].desc);
 		}
-	}
+	<% end %>
+	
  });
 
 

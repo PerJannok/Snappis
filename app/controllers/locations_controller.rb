@@ -1,4 +1,5 @@
 class LocationsController < ApplicationController
+
   # GET /locations
   # GET /locations.json
   def index
@@ -25,6 +26,9 @@ class LocationsController < ApplicationController
   # GET /locations/new
   # GET /locations/new.json
   def new
+  
+	  @stored_locations = Location.all.each
+
     @location = Location.new
 
     respond_to do |format|

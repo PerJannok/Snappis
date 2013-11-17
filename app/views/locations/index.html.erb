@@ -5,10 +5,7 @@
     <tr>
       <th>Address</th>
       <th>City</th>
-      <th>Postcode</th>
       <th>Country</th>
-      <th>Lat</th>
-      <th>Lng</th>
       <th>Date</th>
     </tr>
 
@@ -16,10 +13,7 @@
     <tr>
       <td><%= link_to location.address, location %></td>
       <td><%= link_to location.city, location %></td>
-      <td><%= location.postcode %></td>
       <td><%= location.country %></td>
-      <td><%= location.lat %></td>
-      <td><%= location.lng %></td>
       <td><%= location.created_at.to_s(:short) %></td>
     </tr>
   <% end %>
