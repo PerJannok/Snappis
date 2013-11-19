@@ -53,7 +53,7 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
 
 		if (bounds.contains(myLatlng) ){
 			// marker is within bounds
-			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.average_cat1_rating %>");
+			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.id %>", "<%= entry.average_cat1_rating %>");
 		} else {
 			//console.log("remove: " + locations[i].desc);
 		}
@@ -211,7 +211,7 @@ function findMe() {
 	}
 }
 
-function placeMarker(location, name, avgrating) {
+function placeMarker(location, name, id, avgrating) {
 	var markerToPlace = new google.maps.Marker({
 		position: location,
 		draggable: false,
@@ -221,7 +221,8 @@ function placeMarker(location, name, avgrating) {
 		map: map
  	});
   
-  var contentString = name + '<br>' + avgrating;
+  var contentString = name + '<br>' + avgrating + '<br>' + '<a href="/locations/' + id + '">See details</a><br>';
+  
  	
  	google.maps.event.addListener(markerToPlace, 'click', function() {
     infowindow.setContent(contentString);
