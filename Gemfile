@@ -16,6 +16,7 @@ gem "authbuttons-rails"
 gem "nifty-generators"
 gem 'figaro'
 gem 'mongoid'
+gem "mongoid_rails_migrations", "~> 1.0.1"
 
 gem 'jquery-star-rating-rails'
 
