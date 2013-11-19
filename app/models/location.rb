@@ -50,7 +50,7 @@ class Location
 		@total = self.ratings.size
 		if !@total.nil?
 			@value = @value.to_f / @total.to_f
-			puts @value
+			#puts @value
 			@value = 0.0 unless @value.finite?
 		end
 		return @value
@@ -66,7 +66,7 @@ class Location
 		@total = self.ratings.size
 		if !@total.nil?
 			@value = @value.to_f / @total.to_f
-			puts @value
+			#puts @value
 			@value = 0.0 unless @value.finite?
 		end
 		return @value

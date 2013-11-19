@@ -48,7 +48,7 @@ class LocationsController < ApplicationController
     @location = Location.new(params[:location])
     
     if current_user.present?
-    	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat2value => params[:starCat2])
+    	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
     end
     
     #puts params.inspect
@@ -88,12 +88,29 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.json
   def destroy
-    @location = Location.find(params[:id])
-    @location.destroy
 
-    respond_to do |format|
-      format.html { redirect_to locations_url }
-      format.json { head :ok }
-    end
+#####################  	
+# should only be used as cleanup / administrative
+#####################  	
+#  	
+#  	location = Location.find(params[:id])
+#  	
+#  	if !location.nil?
+#	  	#puts location.location_name
+#			location.ratings.each do |rating|
+#				rating.destroy
+#				#puts rating.Cat1value
+#			end
+#		  location.destroy
+#    end
+#  	
+#  	respond_to do |format|
+#      format.html { redirect_to locations_url, notice: 'Location was successfully deleted.' }
+#      format.json { head :no_content }
+#    end
+
   end
+  
+  
+  
 end

@@ -8,7 +8,7 @@ class RatingController < ApplicationController
 
     @location = Location.find(params[:location_id])
     
-   	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat2value => params[:starCat2])
+   	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
     
     
     respond_to do |format|
@@ -27,7 +27,9 @@ class RatingController < ApplicationController
 		@location = Location.find(@rating.location_id)
 		
 		@rating.Cat1value = params[:starCat1]
+		@rating.Cat1comment = params[:Cat1Comment]
 		@rating.Cat2value = params[:starCat2]
+		@rating.Cat2comment = params[:Cat2Comment]
 		    	
 		#puts "update rating"
 		#puts params.inspect

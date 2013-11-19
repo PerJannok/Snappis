@@ -24,14 +24,14 @@
   </p>
 
   <p>
-    <b>Your Cat1 rating:</b><br>
     <% if current_user.present? %>
     	<!-- user logged in -->
-    	<% if !Rating.where(:user_id => current_user.id).blank? %>
 				<% if !Rating.where(:user_id => current_user.id, :location_id => @location.id).blank? %>
 		  		<!-- user has rated this location earlier -->
 		  		<% @rating = current_user.ratings.where(location_id: @location.id).first %>
+		  		<% @rating.Cat1comment %>
 				 	<%= form_for :rating, :url => edit_rating_path(:id => @rating.id) do |f| %>
+				    <b>Your Cat1 rating:</b><br>
 						<% (1..5).each do |i| %>
 							<% if i == current_user_cat1_rating %>
 								<input name="starCat1" type="radio" class="star" checked="checked" value="<%= i %>"/>
@@ -39,11 +39,26 @@
 								<input name="starCat1" type="radio" class="star" value="<%= i %>"/>
 							<% end %>
 						<% end %>
+						<br>
+						<textarea cols="30" rows="3" name="Cat1Comment"><%= @rating.Cat1comment %></textarea>
+						<br>
+				    <b>Your Cat2 rating:</b><br>
+						<% (1..5).each do |i| %>
+							<% if i == current_user_cat2_rating %>
+								<input name="starCat2" type="radio" class="star" checked="checked" value="<%= i %>"/>
+							<% else %>
+								<input name="starCat2" type="radio" class="star" value="<%= i %>"/>
+							<% end %>
+						<% end %>
+						<br>
+						<textarea cols="30" rows="3" name="Cat2Comment"><%= @rating.Cat2comment %></textarea>
+						<br>
 						<%= f.submit "Update" %>
 					<% end %>
 				<% else %>
 		  		<!-- user has NOT rated this location -->
 				 	<%= form_for :rating, :url => new_rating_path(:location_id => @location.id) do |f| %>
+				    <b>Your Cat1 rating:</b><br>
 						<% (1..5).each do |i| %>
 							<% if i == current_user_cat1_rating %>
 								<input name="starCat1" type="radio" class="star" checked="checked" value="<%= i %>"/>
@@ -51,28 +66,10 @@
 								<input name="starCat1" type="radio" class="star" value="<%= i %>"/>
 							<% end %>
 						<% end %>
-						<%= f.submit "Update" %>		  
-					<% end %>
-				<% end %>
-	    <% else %>
-				<!-- user logged in but has no ratings-->
-				Go ahead and rate this location!				
-	    <% end %>
-    <% else %>
-			<!-- user not logged in -->
-			If you login you can rate this location!				
-    <% end %>
-  </p>
-
-  <p>
-    <b>Your Cat2 rating:</b><br>
-    <% if current_user.present? %>
-    	<!-- user logged in -->
-    	<% if !Rating.where(:user_id => current_user.id).blank? %>
-				<% if !Rating.where(:user_id => current_user.id, :location_id => @location.id).blank? %>
-		  		<!-- user has rated this location earlier -->
-		  		<% @rating = current_user.ratings.where(location_id: @location.id).first %>
-				 	<%= form_for :rating, :url => edit_rating_path(:id => @rating.id) do |f| %>
+						<br>
+						<textarea cols="30" rows="3" name="Cat1Comment"></textarea>
+						<br>
+				    <b>Your Cat2 rating:</b><br>
 						<% (1..5).each do |i| %>
 							<% if i == current_user_cat2_rating %>
 								<input name="starCat2" type="radio" class="star" checked="checked" value="<%= i %>"/>
@@ -80,25 +77,12 @@
 								<input name="starCat2" type="radio" class="star" value="<%= i %>"/>
 							<% end %>
 						<% end %>
-						<%= f.submit "Update" %>
-					<% end %>
-				<% else %>
-		  		<!-- user has NOT rated this location -->
-				 	<%= form_for :rating, :url => new_rating_path(:location_id => @location.id) do |f| %>
-						<% (1..5).each do |i| %>
-							<% if i == current_user_cat2_rating %>
-								<input name="starCat2" type="radio" class="star" checked="checked" value="<%= i %>"/>
-							<% else %>
-								<input name="starCat2" type="radio" class="star" value="<%= i %>"/>
-							<% end %>
-						<% end %>
+						<br>
+						<textarea cols="30" rows="3" name="Cat2Comment"></textarea>
+						<br>
 						<%= f.submit "Update" %>		  
 					<% end %>
 				<% end %>
-	    <% else %>
-				<!-- user logged in but has no ratings-->
-				Go ahead and rate this location!				
-	    <% end %>
     <% else %>
 			<!-- user not logged in -->
 			If you login you can rate this location!				
@@ -126,4 +110,13 @@
   </p>
 
   <%= render :partial => "googlemap_show" %>
+  
+  <!-- only for cleanup -->
+  <!-- deletes location, including all ratings for that location -->
+  <!--
+  <%= form_for :rating, :method => :delete, :remote => true do |f| %>
+		<%= f.submit :value => "Delete" %>
+	<% end %>
+	-->
+	
 </div>
