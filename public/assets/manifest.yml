@@ -1,8 +1,12 @@
 ---
-application.js: application-e6ec9fa29c9f5d199c56b9b8bf795634.js
-application/index.js: application-e6ec9fa29c9f5d199c56b9b8bf795634.js
-application.css: application-bb3a1405322ae642586af7466ef15874.css
-application/index.css: application-bb3a1405322ae642586af7466ef15874.css
+application.js: application-07d77eab5c0d77ec3b82e4e1456f9d22.js
+application/index.js: application-07d77eab5c0d77ec3b82e4e1456f9d22.js
+application.css: application-6f6e25ffb456c4b3e5b07d6c9ebcc996.css
+application/index.css: application-6f6e25ffb456c4b3e5b07d6c9ebcc996.css
+delete.gif: delete-1e844d7204cc8f7a557cfe2a7a78aced.gif
+delete/index.gif: delete-1e844d7204cc8f7a557cfe2a7a78aced.gif
+star.gif: star-31514b379b533309b6d1382150c2614f.gif
+star/index.gif: star-31514b379b533309b6d1382150c2614f.gif
 fontawesome-webfont.eot: fontawesome-webfont-009f6d1f667cc42c25e712ab3429cbc7.eot
 fontawesome-webfont/index.eot: fontawesome-webfont-009f6d1f667cc42c25e712ab3429cbc7.eot
 fontawesome-webfont.svg: fontawesome-webfont-f1c2889911d212e1403b68eabc1a3a56.svg
