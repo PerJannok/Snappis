@@ -2,7 +2,6 @@ class Location
 	include Mongoid::Document
 	include Mongoid::Timestamps
 
-
 	## Database authenticatable
 	field :id, :type => Integer, :default => ""
 	field :address, :type => String, :default => ""

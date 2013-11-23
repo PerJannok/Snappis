@@ -18,6 +18,8 @@ gem 'figaro'
 gem 'mongoid'
 gem "mongoid_rails_migrations", "~> 1.0.1"
 
+gem 'yelpster'
+
 gem 'jquery-star-rating-rails'
 
 gem 'therubyracer'

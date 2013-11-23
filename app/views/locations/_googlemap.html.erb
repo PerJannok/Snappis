@@ -49,15 +49,16 @@ google.maps.event.addListener(map, 'bounds_changed', function() {
 	
 	<% @stored_locations.each do |entry| %>
 		// Create the LatLng
-   	var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
+		var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
 
 		if (bounds.contains(myLatlng) ){
 			// marker is within bounds
 			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.id %>", "<%= entry.average_cat1_rating %>");
 		} else {
-			//console.log("remove: " + locations[i].desc);
+			//console.log("remove: " + "<%= entry.location_name %>");
 		}
 	<% end %>
+
 	
  });
 
@@ -177,6 +178,21 @@ function fillPlaceForm(results) {
 
 }
 
+
+function showYelp() {
+
+
+	var bounds = map.getBounds();
+	var ne = bounds.getNorthEast(); // LatLng of the north-east corner
+	var sw = bounds.getSouthWest(); // LatLng of the south-west corder
+	var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+	var se = new google.maps.LatLng(sw.lat(), ne.lng());
+	
+	document.getElementById("yelphref").href = "/locations/showyelp?ne_lat=" + ne.lat() + ";ne_lng=" + ne.lng() + ";sw_lat=" + sw.lat() + ";sw_lng=" + sw.lng();
+
+	document.getElementById("yelphref").click();
+	
+}
 
 function findMe() {
 	if(navigator.geolocation) {
@@ -442,5 +458,16 @@ function showMap(showLat,showLong,addMarker) {
 
 //-->
 </script>
+
+
+<a id="yelphref" href="" data-remote="true"></a>
+
+<!--
+<%= link_to "Show Yelp locations link", { :action => 'showyelp', :sw_lat => '39.900000', :sw_lng => '-122.500000', :ne_lat => '37.788022', :ne_lng => '-122.399797' }, :remote => true %>
+-->
+
+<input type="button" value="Show Yelp locations" onclick="showYelp();" />
+
+<div id='yelpdiv'></div>
 
 <br />

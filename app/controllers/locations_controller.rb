@@ -1,11 +1,13 @@
 class LocationsController < ApplicationController
 
-  # GET /locations
+			
+	# GET /locations
   # GET /locations.json
   def index
     #@locations = Location.order("id desc").page(params[:page]).per(50)
     @locations = Location.all
-
+    
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @locations }
@@ -28,6 +30,96 @@ class LocationsController < ApplicationController
   def new
   
 	  @stored_locations = Location.all.each
+	  #@stored_locations = Array.new
+
+	  
+		# construct a yelp client instance
+#		client = Yelp::Client.new
+		
+		# perform an address/location-based search for cream puffs nearby
+#		request = Yelp::V1::Review::Request::Location.new(
+#					     :address => '650 Mission St',
+#					     :city => 'San Francisco',
+#					     :state => 'CA',
+#					     :radius => 2,
+#					     :term => 'cream puffs',
+#					     :yws_id => 'H7JaEQfqf4qG-AvyBRIbgQ')
+#		
+#		response = client.search(request)
+#		puts "yelp response"
+#		businesses = response["businesses"]
+#		
+#		businesses.each do |singlebusiness|
+#			puts singlebusiness["name"]	
+#		end		
+             
+             
+		# Make request to retrieve details of business vi yelp business id 
+#		request = Yelp::V2::Business::Request::Id.new(
+#				:yelp_business_id => "pjb2WMwa0AfK3L-dWimO8w",
+#				:consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
+#				:consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
+#				:token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
+#				:token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')
+
+#		singlebusiness = client.search(request)
+#		puts "yelp response"
+#		puts singlebusiness["name"]
+
+
+
+ # search for businesses via bounding box geo coords'
+# request = Yelp::V2::Search::Request::BoundingBox.new(
+#						:term => "cream puffs",
+#						:sw_latitude => 37.900000,
+#						:sw_longitude => -122.500000,
+#						:ne_latitude => 37.788022,
+#						:ne_longitude => -122.399797,
+#						:limit => 3,
+#						:consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
+#						:consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
+#						:token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
+#						:token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')
+# @yelpresponse = client.search(request)
+
+# # perform an address/location-based search for cream puffs nearby
+# request = Yelp::V1::Review::Request::Location.new(
+#             :address => '650 Mission St',
+#             :city => 'San Francisco',
+#             :state => 'CA',
+#             :radius => 2,
+#             :term => 'cream puffs',
+#             :yws_id => 'H7JaEQfqf4qG-AvyBRIbgQ')
+# response = client.search(request)
+
+	
+	
+	
+		
+#		response.each do |resp|
+#			if resp.kind_of?(Array)
+#				if resp[0] == "name"
+#					puts resp[1]
+#				end
+#			end
+#		end
+
+		
+#		if response.is_a?(Hash)
+#			if response.has_key?("name")
+#				puts singlebusiness["name"]	
+#			end
+#		end
+		
+#		keys = response.keys
+#		puts "#{keys}"
+		
+#		response["businesses"].each { |x| puts x }
+		
+
+		
+
+
 
     @location = Location.new
 
@@ -111,6 +203,33 @@ class LocationsController < ApplicationController
 
   end
   
-  
+	def showyelp
+	
+		@yelpresponse = Array.new
+		
+		client = Yelp::Client.new
+		
+		request = Yelp::V2::Search::Request::BoundingBox.new(
+							:term => "liquor",
+							:sw_latitude => params[:sw_lat],
+							:sw_longitude => params[:sw_lng],
+							:ne_latitude => params[:ne_lat],
+							:ne_longitude => params[:ne_lng],
+							:limit => 3,
+							:consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
+							:consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
+							:token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
+							:token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')
+		
+		response = client.search(request)
+ 		
+ 		businesses = response["businesses"]
+		
+		businesses.each do |singlebusiness|
+			@yelpresponse << singlebusiness["name"]	
+		end
+		
+		
+	end  
   
 end

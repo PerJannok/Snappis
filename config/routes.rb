@@ -7,6 +7,7 @@ ReviewSite::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   resources :users
   
+  get '/locations/showyelp', to: 'locations#showyelp'
   
   resources :locations
   match '/locations' => 'locations#new'
