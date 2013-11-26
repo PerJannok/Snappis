@@ -22,6 +22,8 @@ gem 'yelpster'
 
 gem 'jquery-star-rating-rails'
 
+gem 'mail'
+
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'

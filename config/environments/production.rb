@@ -70,7 +70,16 @@ ReviewSite::Application.configure do
     user_name: ENV["GMAIL_USERNAME"],
     password: ENV["GMAIL_PASSWORD"]
   }
-
+  
+#	ActionMailer::Base.smtp_settings = {
+#		:address        => 'smtp.sendgrid.net',
+#		:port           => '587',
+#		:authentication => :plain,
+#		:user_name      => ENV['SENDGRID_USERNAME'],
+#		:password       => ENV['SENDGRID_PASSWORD'],
+#		:domain         => 'heroku.com',
+#		:enable_starttls_auto => true
+#	}
 
   config.action_mailer.default_url_options = { :host => 'example.com' }
   # ActionMailer Config
@@ -79,6 +88,7 @@ ReviewSite::Application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default :charset => "utf-8"
+
 
 
 end
