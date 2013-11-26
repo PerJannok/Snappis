@@ -46,8 +46,8 @@ ReviewSite::Application.configure do
 #  }
   
   ActionMailer::Base.smtp_settings = {
-		:user_name => ENV["SENDGRID_USERNAME"],
-		:password => ENV["SENDGRID_PASSWORD"],
+		:user_name => API_KEYS["SENDGRID_USERNAME"],
+		:password => API_KEYS["SENDGRID_PASSWORD"],
 		:domain => 'localhost:3000',
 		:address => 'smtp.sendgrid.net',
 		:port => 587,
