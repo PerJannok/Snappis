@@ -235,7 +235,8 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   
-  API_KEYS = YAML::load_file("#{Rails.root}/config/api_keys.yml")[Rails.env] if Rails.env.development?
+  # this is moved to / defined in development.rb
+  #API_KEYS = YAML::load_file("#{Rails.root}/config/api_keys.yml")[Rails.env] if Rails.env.development?
   
   config.omniauth :google_oauth2, API_KEYS['google_api_key'], API_KEYS['google_api_secret'], { access_type: "offline", approval_prompt: "" } if Rails.env.development?
   config.omniauth :twitter, API_KEYS['twitter_api_key'], API_KEYS['twitter_api_secret'] if Rails.env.development?

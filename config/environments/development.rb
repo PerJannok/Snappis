@@ -43,16 +43,18 @@ ReviewSite::Application.configure do
 #    enable_starttls_auto: true,
 #    user_name: ENV["GMAIL_USERNAME"],
 #    password: ENV["GMAIL_PASSWORD"]
-#  }
-  
-  ActionMailer::Base.smtp_settings = {
-		:user_name => API_KEYS["SENDGRID_USERNAME"],
-		:password => API_KEYS["SENDGRID_PASSWORD"],
-		:domain => 'localhost:3000',
-		:address => 'smtp.sendgrid.net',
-		:port => 587,
+#  }	
+
+	API_KEYS = YAML::load_file("#{Rails.root}/config/api_keys.yml")[Rails.env] if Rails.env.development?
+	
+	ActionMailer::Base.smtp_settings = {
+		:address        => 'smtp.sendgrid.net',
+		:port           => '587',
 		:authentication => :plain,
+		:user_name      => API_KEYS['SENDGRID_USERNAME'],
+		:password       => API_KEYS['SENDGRID_PASSWORD'],
+		:domain         => 'heroku.com',
 		:enable_starttls_auto => true
 	}
-
+	
 end
