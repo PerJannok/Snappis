@@ -46,18 +46,19 @@ var infowindow = new google.maps.InfoWindow();
 google.maps.event.addListener(map, 'bounds_changed', function() {
 	var bounds = map.getBounds();
 	//console.log(bounds.toString());
-	
-	<% @stored_locations.each do |entry| %>
-		// Create the LatLng
-		var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
 
-		if (bounds.contains(myLatlng) ){
-			// marker is within bounds
-			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.id %>", "<%= entry.average_cat1_rating %>");
-		} else {
-			//console.log("remove: " + "<%= entry.location_name %>");
-		}
-	<% end %>
+	
+//	<% @stored_locations.each do |entry| %>
+//		// Create the LatLng
+//		var myLatlng = new google.maps.LatLng(<%= entry["lat"] %>,<%= entry["lng"] %>);
+//
+//		if (bounds.contains(myLatlng) ){
+//			// marker is within bounds
+//			placeMarker(myLatlng, "<%= entry.location_name %>", "<%= entry.id %>", "<%= entry.average_cat1_rating %>");
+//		} else {
+//			//console.log("remove: " + "<%= entry.location_name %>");
+//		}
+//	<% end %>
 
 	
  });
