@@ -5,7 +5,9 @@
 <div class="search-bar">
   <div class="search-item">
 	  <div class="search-and-submit control-group">
-	    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
+			<%= form_for(@location, html: { class: "form-horizontal" }) do |f| %>
+		    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
+ 			<% end %>
     </div>
   </div>
 </div>
