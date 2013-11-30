@@ -8,7 +8,7 @@
 			  <%= form_for :location, :url => new_location_path() do |f| %>
 		    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
 		    <div class="clear-search">
-		    <a href="">&#10799;</a>
+		    <a href="" onclick="return clearSearch();">&#10799;</a>
         <input type="submit" value="Search">
     </div>
     </div>
@@ -67,6 +67,11 @@
 		
 
 	}); 	
+
+function clearSearch() {
+	document.getElementById('location_search') = '';
+	return false;
+}
 	
 -->
 </script>
