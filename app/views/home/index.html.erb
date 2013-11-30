@@ -1,4 +1,34 @@
-<h3>Home</h3>
-<% @users.each do |user| %>
-  <p>User: <%=link_to user.name, user %></p>
-<% end %>
+<div class="hero">
+<div class="hero-inner">
+<h1>Rate and review Places</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui, veritatis, neque, adipisci assumenda doloribus quaerat minima optio suscipit nihil earum quidem sint tempora culpa pariatur delectus cupiditate voluptate aspernatur dignissimos.</p>
+<div class="search-bar">
+  <div class="search-item">
+	  <div class="search-and-submit control-group">
+			<%= form_for(@location, html: { class: "form-horizontal" }) do |f| %>
+		    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
+ 			<% end %>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="wrapper">
+	<div class="cards">
+		<div class="card">
+			<div class="card-header">
+				<p>Hotell</p> <div class="rating">Member Rating &#x2605; &#x2605; &#x2605; <button>Add Rating</button></div>								
+			</div>
+			<img src="" alt="">
+			<h1>Legal Seafoods</h1>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, officiis sunt neque facilis culpa molestiae necessitatibus delectus veniam provident. Similique, quibusdam inventore necessitatibus perspiciatis voluptatum error dolor eaque exercitationem fugit.</p>
+			<div class="other-ratings">
+				<p>Google</p>
+				<p>Yelp</p>
+			</div>
+
+		</div>
+	
+	</div>
+</div>

@@ -9,6 +9,8 @@ end
 gem 'jquery-rails'
 gem 'devise'
 gem 'omniauth'
+gem 'bourbon'
+gem 'neat'
 gem 'twitter'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
@@ -25,8 +27,7 @@ gem 'jquery-star-rating-rails'
 gem 'mail'
 
 gem 'therubyracer'
-gem 'less-rails'
-gem 'twitter-bootstrap-rails'
+
 
 group :development do
   gem 'better_errors'
