@@ -29,7 +29,6 @@
 	
 	// Autocomplete Listener
 	google.maps.event.addListener(autocomplete, 'place_changed', function() {
-		alert('alert');
 		place = autocomplete.getPlace();
 		
 		//document.getElementById("location_lat").value = place.geometry.location.lat();
@@ -47,9 +46,26 @@
 		}
 
 		//rating from google: place.rating
-		alert('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
+		//alert('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
 		
+		//alert('rating: ' + Math.round(place.rating));
 		
+		document.getElementById("address").innerHTML = address;
+		
+		var str = "";
+		for (var i=1; i<6; i++)
+		{
+			if (i == Math.round(place.rating))  {
+				str += "<input name='star' type='radio' class='star' disabled='disabled' checked='checked'>";
+				}
+			else {
+				str += "<input name='star' type='radio' class='star' disabled='disabled'>";
+			}
+		}
+		
+		document.getElementById("google").innerHTML = str;
+		
+
 	}); 	
 	
 -->
@@ -65,14 +81,16 @@
 
 				 <div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button>Add Rating</button></div>								
 			</div>
-			<div class="card-content">  		
+			<div class="card-content"  		
 					<div class="card-image"></div>
 						<h5>Legal Seafoods, <span>Boston Harbor</span></h5>
+						<p class="address" id="address"></p>
 
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem explicabo possimus qui nesciunt. Ipsa, tempora, et mollitia quam dolores magnam temporibus necessitatibus quisquam ad repellendus natus facere voluptates quasi commodi.</p>
 
 						<div class="other-ratings">
-							<a href="" class="google">Google &#x2605; &#x2605; &#x2605; &#9734; &#9734;</a>
+							Google<div class="google" id="google"></div>
+														
 							<a href="" class="yelp">Yelp &#x2605; &#x2605; &#x2605; &#9734; &#9734;</a>
 						</div>
 
