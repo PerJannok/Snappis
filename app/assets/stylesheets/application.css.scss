@@ -134,6 +134,7 @@ header.navigation {
 
   background-color: $hero-background;
   padding-bottom: 4em;
+  margin-bottom: 2em;
 
   .hero-inner {
     // @include outer-container;
@@ -188,6 +189,8 @@ header.navigation {
   $search-bar-background: lighten($search-bar-border-color, 10);
   
   @include clearfix;
+  max-width: 80%;
+  margin: auto;
   border: $search-bar-border;
   background-color: $search-bar-background;
   border-radius: $base-border-radius;
@@ -231,4 +234,89 @@ header.navigation {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
+.cards {
+  $card-border-color: $base-border-color;
+  $card-border: 1px solid $card-border-color;
+  $card-color: lighten($card-border-color, 10);
+  $card-header-color: $card-color;
+  $card-hover-color: darken($card-color, 5);
+
+  @include clearfix;
+  cursor: pointer;
+  margin-bottom: 1em;
+
+  .card {
+    // height: 190px;
+    border: $card-border;
+    background-color: $card-color;
+    border-radius: $base-border-radius;
+    margin-bottom: $base-line-height;
+
+    @include media($medium-screen) {
+      
+    }
+
+    .card-header {
+      @include clearfix;
+      background-color: $card-header-color;
+      border-bottom: $card-border;
+      border-top-left-radius: $base-border-radius;
+      border-top-right-radius: $base-border-radius;
+      font-weight: bold;
+      padding: $space;
+
+      button {
+        font-size: 12px;
+        margin-left: $space;
+      }
+
+      p {
+        padding: 0;
+        margin: 0;
+        float: left;
+      }
+      .rating {
+        font-weight: 300;
+        float: right;
+      }
+    }
+
+    img {
+
+    }
+
+    h1 {
+      padding: $space;
+      font-size: $base-font-size;
+    }
+
+    p {
+      padding: 0 $space;
+      overflojknw: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+    }
+
+    h3 {
+      font-weight: 800;
+    }
+
+    &:hover {
+      background-color: $card-hover-color;
+      .card-header {
+        background-color: $card-hover-color;
+      }
+    }
+
+    &:active {
+      background-color: $card-color;
+      .card-header {
+        background-color: $card-color;
+      }
+    }
+  }
+}
 
