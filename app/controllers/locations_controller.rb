@@ -5,13 +5,13 @@ class LocationsController < ApplicationController
   # GET /locations.json
   def index
     #@locations = Location.order("id desc").page(params[:page]).per(50)
-    @locations = Location.all
+    #@locations = Location.all
     
     puts "loc controller index"
     
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @locations }
+      #format.html # index.html.erb
+      #format.json { render json: @locations }
     end
   end
 
@@ -29,6 +29,8 @@ class LocationsController < ApplicationController
   # GET /locations/new
   # GET /locations/new.json
   def new
+  
+  	puts "loc controller new"
   
 	  @stored_locations = Location.all.each
 	  #@stored_locations = Array.new
@@ -125,7 +127,9 @@ class LocationsController < ApplicationController
     @location = Location.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      #format.html # new.html.erb
+      #format.html { redirect_to :controller=>'home', :action => 'index', :id => @location.id}
+      format.html { redirect_to :controller=>'home', :action => 'index', :id => @location.id}
       format.json { render json: @location }
     end
   end
@@ -139,7 +143,7 @@ class LocationsController < ApplicationController
   # POST /locations.json
   def create
   	puts "loc controller create"
-  	puts params[:location]
+  	puts params[:location_search]
   	
     @location = Location.new(params[:location])
     

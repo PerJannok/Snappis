@@ -1,12 +1,14 @@
 class HomeController < ApplicationController
 
   def index
-  	@location = Location.new
+  	puts "home controller index"
+  	#@location = Location.new
 
 
   end
   
   def show
+  	puts "home cntrl show"
     @location = Location.find(params[:id])
 
     respond_to do |format|

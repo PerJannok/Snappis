@@ -10,6 +10,7 @@ ReviewSite::Application.routes.draw do
   get '/locations/showyelp', to: 'locations#showyelp'
   
   resources :locations
+  match '/locations/new' => 'locations#new'
   match '/locations' => 'locations#new'
   
   resources :rating

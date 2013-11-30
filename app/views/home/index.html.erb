@@ -5,7 +5,7 @@
 <div class="search-bar">
   <div class="search-item">
 	  <div class="search-and-submit control-group">
-			<%= form_for(@location, html: { class: "form-horizontal" }) do |f| %>
+			  <%= form_for :location, :url => new_location_path() do |f| %>
 		    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
 		    <div class="clear-search">
 		    <a href="">&#10799;</a>
@@ -26,6 +26,32 @@
 	// Address Autocomplete
 	var input = document.getElementById('location_search');
 	var autocomplete = new google.maps.places.Autocomplete(input);
+	
+	// Autocomplete Listener
+	google.maps.event.addListener(autocomplete, 'place_changed', function() {
+		alert('alert');
+		place = autocomplete.getPlace();
+		
+		//document.getElementById("location_lat").value = place.geometry.location.lat();
+		//document.getElementById("location_lng").value = place.geometry.location.lng();
+
+		var address = '';
+		if (place.address_components) {
+		  address = [(place.address_components[0] &&
+		              place.address_components[0].short_name || ', '),
+		             (place.address_components[1] &&
+		              place.address_components[1].short_name || ', '),
+		             (place.address_components[2] &&
+		              place.address_components[2].short_name || '')
+		            ].join(' ');
+		}
+
+		//rating from google: place.rating
+		alert('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
+		
+		
+	}); 	
+	
 -->
 </script>
 
