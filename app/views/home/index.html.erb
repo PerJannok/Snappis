@@ -7,6 +7,11 @@
 	  <div class="search-and-submit control-group">
 			<%= form_for(@location, html: { class: "form-horizontal" }) do |f| %>
 		    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
+		    <div class="clear-search">
+		    <a href="">&#10799;</a>
+        <input type="submit" value="Search">
+    </div>
+    </div>
  			<% end %>
     </div>
   </div>
@@ -18,14 +23,14 @@
 	<div class="cards">
 		<div class="card">
 			<div class="card-header">
-				<p>Hotell</p> <div class="rating">Member Rating &#x2605; &#x2605; &#x2605; <button>Add Rating</button></div>								
+				<p>Hotell</p> <div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button>Add Rating</button></div>								
 			</div>
 			<img src="" alt="">
 			<h1>Legal Seafoods</h1>
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga, officiis sunt neque facilis culpa molestiae necessitatibus delectus veniam provident. Similique, quibusdam inventore necessitatibus perspiciatis voluptatum error dolor eaque exercitationem fugit.</p>
 			<div class="other-ratings">
-				<p>Google</p>
-				<p>Yelp</p>
+				<p>Google &#x2605; &#x2605; &#x2605; &#9734; &#9734;</p>
+				<p>Yelp &#x2605; &#x2605; &#x2605; &#9734; &#9734;</p>
 			</div>
 
 		</div>
