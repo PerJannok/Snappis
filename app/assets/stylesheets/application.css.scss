@@ -244,6 +244,8 @@ header.navigation {
 .cards {
   $card-border-color: $base-border-color;
   $card-border: 1px solid $card-border-color;
+  $card-background: lighten($card-border-color, 10);
+  $well-color: darken($card-background, 10);
   $card-color: lighten($card-border-color, 10);
   $card-header-color: $card-color;
   $card-hover-color: darken($card-color, 5);
@@ -273,42 +275,74 @@ header.navigation {
       font-weight: bold;
       padding: $space /2;
 
+      .legend-indicator {
+        display: table-cell;
+        text-align: center;
+        float: left;
+        vertical-align: middle;
+        width: $space*2;
+        height: $space*2;
+        border-radius: $base-border-radius;
+        background-color: white;
+      }
+
+      .legend-indicator * {
+        vertical-align: middle;
+      }
+
       button {
         font-size: 12px;
         margin-left: $space;
       }
 
-      p {
-        padding: 0;
-        margin: 0;
-        float: left;
-      }
       .rating {
         font-weight: 300;
         float: right;
       }
     }
 
-    img {
+    .card-content {
+      @include clearfix;
+      $card-height: $space *8;
+      margin: $space;      
 
+        .card-image {
+          float: left;
+          width: $card-height;
+          height: $card-height;
+          margin-right: 1em;
+          border: $card-border;
+          border-radius: $base-border-radius;
+          background-color: $card-background;
+        }
+
+        h5 {
+          span {
+            font-weight: 400;
+          }
+        }
+
+        @include media($large-screen) {
+          @include span-columns(6);
+          @include omega(2n);
+        }
+      
     }
 
-    h1 {
-      padding: $space;
-      font-size: $base-font-size;
-    }
-
-    p {
-      padding: 0 $space;
-      overflojknw: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-    }
-
-    .other-ratings p {
+    .other-ratings a {
       float: left;
+      padding: $space/3 $space/2;
+      color: darken($well-color, 30);
+      background-color: $well-color;
+
+      &.google {
+        border-top-left-radius: $base-border-radius;
+        border-bottom-left-radius: $base-border-radius;
+      }
+      &.yelp {
+       border-top-right-radius: $base-border-radius;
+       border-bottom-right-radius: $base-border-radius; 
+      }
     }
 
     &:hover {
