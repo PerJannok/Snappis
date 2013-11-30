@@ -7,6 +7,7 @@ class LocationsController < ApplicationController
     #@locations = Location.order("id desc").page(params[:page]).per(50)
     @locations = Location.all
     
+    puts "loc controller index"
     
     respond_to do |format|
       format.html # index.html.erb
@@ -117,7 +118,7 @@ class LocationsController < ApplicationController
 #		response["businesses"].each { |x| puts x }
 		
 
-		
+		puts params['location_search']
 
 
 
@@ -137,6 +138,9 @@ class LocationsController < ApplicationController
   # POST /locations
   # POST /locations.json
   def create
+  	puts "loc controller create"
+  	puts params[:location]
+  	
     @location = Location.new(params[:location])
     
     if current_user.present?
