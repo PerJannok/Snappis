@@ -1,4 +1,18 @@
-<h3>Home</h3>
-<% @users.each do |user| %>
-  <p>User: <%=link_to user.name, user %></p>
-<% end %>
+<div class="hero">
+<div class="hero-inner">
+<h1>Rate and review Places</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui, veritatis, neque, adipisci assumenda doloribus quaerat minima optio suscipit nihil earum quidem sint tempora culpa pariatur delectus cupiditate voluptate aspernatur dignissimos.</p>
+<div class="search-bar">
+  <div class="search-item">
+	  <div class="search-and-submit control-group">
+	    <%= text_field_tag :location_search, nil, class: "span12 search-query", type: "search", placeholder: "Search for establishment, hotel, restaurant, city, etc" %>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="wrapper">
+	<div class="control-group">
+	</div>
+</div>

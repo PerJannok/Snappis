@@ -10,31 +10,225 @@
  *
  *= require_self
  *= require jquery-star-rating
- *= require_tree .
 */
 
+@import 'bourbon';
+@import 'grid-settings';
+@import 'neat';
+@import 'normalize';
 
-.brand {
-  float: left;
-  padding-right: 8px;
+@import "variables";
+@import "extends/base";
+@import "mixins/base";
+@import "typography";
+@import "forms";
+@import "tables";
+@import "lists";
+@import "flashes";
+
+.wrapper {
+  @include outer-container;
 }
-ul.nav {
-  list-style: none;
-  margin: 0 0 2em;
-  padding: 0;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+header.navigation {
+  $navigation-background: $dark-gray;
+  $navigation-color: white;
+  $navigation-height: 60px;
+
+  width: 100%;
+  margin: 0;
+  height: $navigation-height;
+  background-color: $navigation-background;
+
+  .menu-wrapper {
+    @include outer-container;
+  }
+
+  .logo {
+    // padding: 0 20px;
+    font-weight: bold;
+    float: left;
+    line-height: $navigation-height;
+    color: white;
+  }
+
+  p {
+    padding-right: 1em;
+    display: block;
+    float: right;
+    margin: 0;
+    line-height: $navigation-height;
+    color: $navigation-color;
+  }
+
+  &:hover {
+    .nav ul {
+      display: block;
+    }
+  }
+
+  .nav {
+    ul {
+      display: none;
+      -webkit-transform-style: preserve-3d; // stop webkit flicker
+      overflow: hidden;
+      margin: 0 auto;
+      padding: 0;
+      width: 100%;
+
+      li {
+        position: relative;
+        overflow: hidden;
+        display: block;
+        width: 100%;
+        text-align: right;
+        padding-right: 1em;
+        line-height: $navigation-height;
+        width: 100%;
+        position: relative;
+        display: block;
+        z-index: 99999999;
+        overflow: hidden;
+        background-color: $navigation-background;
+
+        a {
+          text-transform: uppercase;
+          font-weight: bold;
+          color: white;
+        }
+      }
+    }
+  }
+
+  @include media ($medium-screen) {
+    p {
+      display: none;
+    }
+    .nav {
+      float: right;
+
+      ul {
+        display: block;
+        margin: 0;
+        padding: 0;
+
+        li {
+          display: inline;
+          display: inline;
+          text-decoration: none;
+          line-height: $navigation-height;
+          padding-right: 1em;
+        }
+      }
+    }
+  }
 }
-ul.nav li {
-  display: inline;
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+.hero {
+  $hero-background: lighten($base-border-color, 10);  
+
+  background-color: $hero-background;
+  padding-bottom: 4em;
+
+  .hero-inner {
+    // @include outer-container;
+    @include clearfix;
+    @extend .wrapper;
+    // padding: 1em;
+    margin: auto;
+
+    h1 {
+      text-align: center;
+      margin: 1em;
+    }
+
+    p {
+      text-align: center;
+      max-width: 50%;
+      margin: auto;
+      margin-bottom: 3em;
+    }
+
+    button {
+      @include button(simple, $base-accent-color);
+      font-size: $base-font-size;
+      outline: none;
+    }
+
+    .hero-copy {
+      
+
+      @include media($medium-screen) {
+        @include span-columns(6);
+      }
+      
+      h6 {
+        margin-bottom: 2em; 
+      }
+    }
+
+    .hero-image {
+      @include media($medium-screen) {
+        @include span-columns(6);
+      }
+    }
+  }
 }
-#flash_notice, #flash_alert {
-  padding: 5px 8px;
-  margin: 10px 0;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+.search-bar {
+  $search-bar-border-color: $base-border-color;
+  $search-bar-border: 1px solid $search-bar-border-color;
+  $search-bar-background: lighten($search-bar-border-color, 10);
+  
+  @include clearfix;
+  border: $search-bar-border;
+  background-color: $search-bar-background;
+  border-radius: $base-border-radius;
+  padding: 0.5em;
+  margin-bottom: 1em;
+
+  .search-item {
+    @include span-columns(12);
+    position: relative; 
+  }
+
+  input {
+    @include box-sizing(border-box);
+    display: block;
+  }
+
+  div.search-and-submit {
+    position: relative;
+
+    input[type=search] {
+      width: 100%;
+      padding: 1em;
+      font-style: italic;
+      border-radius: $base-border-radius*2;
+      top: 0;
+      left: 0;
+      margin: 0;
+    }
+
+    input[type=submit] {
+      @include button(simple, lighten($light-gray, 10));
+      font-size: $base-font-size;
+      color: darken($light-gray, 20);
+      outline: none;
+      position: absolute;
+      right: 0.3em;
+      top: 0.3em;
+      bottom: 0.3em;
+    }
+  }  
 }
-#flash_notice {
-  background-color: #CFC;
-  border: solid 1px #6C6;
-}
-#flash_alert {
-  background-color: #FCC;
-  border: solid 1px #C66;
-}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
