@@ -12,6 +12,8 @@ $base-font-size: 1em;
 $base-line-height: $base-font-size * 1.5;
 $base-border-radius: em(3);
 
+$space: 16px;
+
 // Colors
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +30,7 @@ $base-body-color: white;
 
 //  Font Colors
 $base-font-color: $dark-gray;
-$base-accent-color: $blue;
+$base-accent-color: green;
 
 //  Text Link Colors
 $base-link-color: $base-accent-color;
