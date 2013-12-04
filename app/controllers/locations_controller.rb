@@ -211,33 +211,59 @@ class LocationsController < ApplicationController
 
   end
   
-	def showyelp
+	def searchyelp
+		
+#		puts "search yelp"
+#		puts params[:adr]
+#		puts params[:city]
+#		puts params[:state]
+#		puts params[:term]
 	
-		@yelpresponse = Array.new
+		#@yelpresponse = Array.new
+		@yelpresponse = String.new()
 		
 		client = Yelp::Client.new
-		
-		request = Yelp::V2::Search::Request::BoundingBox.new(
-							:term => "liquor",
-							:sw_latitude => params[:sw_lat],
-							:sw_longitude => params[:sw_lng],
-							:ne_latitude => params[:ne_lat],
-							:ne_longitude => params[:ne_lng],
-							:limit => 3,
-							:consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
-							:consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
-							:token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
-							:token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')
-		
+
+# search for businesses via location (address, neighbourhood, city, state, zip, country, latitude, longitude)'
+		request = Yelp::V2::Search::Request::Location.new(
+					     :address => params[:adr],
+					     :city => params[:city],
+					     :state => params[:state],
+					     :radius => 1,
+					     :term => params[:term],
+					     :limit => 1,
+					     :consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
+					     :consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
+					     :token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
+					     :token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')	
+
 		response = client.search(request)
  		
  		businesses = response["businesses"]
+
+
 		
 		businesses.each do |singlebusiness|
-			@yelpresponse << singlebusiness["name"]	
+			#keys = singlebusiness.keys
+			#puts "#{keys}"
+			
+			#puts singlebusiness["name"]
+			#puts singlebusiness["id"]
+			#puts singlebusiness["location"]
+			
+			adr1 = params[:adr].sub(/Street/, 'St')
+			adr2 = params[:adr].sub(/ St/, ' Street')
+			
+			if singlebusiness["location"]["display_address"][0] == params[:adr] or singlebusiness["location"]["display_address"][0] == adr1 or singlebusiness["location"]["display_address"][0] == adr2
+				#@yelpresponse << singlebusiness["name"]
+				#@yelpresponse << singlebusiness["rating"]
+				
+				@yelpresponse = singlebusiness["rating"].to_s
+			end		
+			
 		end
 		
-		
-	end  
+	end
+	
   
 end

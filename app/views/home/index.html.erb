@@ -44,6 +44,10 @@
 		              place.address_components[2].short_name || '')
 		            ].join(' ');
 		}
+		
+//		for(var index in place.address_components) {
+//			alert( index + " : " + place.address_components[index].long_name + "\n");
+//		}
 
 		//rating from google: place.rating
 		//alert('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
@@ -65,6 +69,10 @@
 		
 		document.getElementById("google").innerHTML = str;
 		
+		
+		document.getElementById("yelphref").href = "/locations/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
+		document.getElementById("yelphref").click();
+		
 
 	}); 	
 
@@ -75,6 +83,8 @@ function clearSearch() {
 	
 -->
 </script>
+
+<a id="yelphref" href="" data-remote="true"></a>
 
 <div class="wrapper">
 	<div class="cards">
@@ -95,8 +105,7 @@ function clearSearch() {
 
 						<div class="other-ratings">
 							Google<div class="google" id="google"></div>
-														
-							<a href="" class="yelp">Yelp &#x2605; &#x2605; &#x2605; &#9734; &#9734;</a>
+							Yelp<div class="yelp" id="yelpdiv"></div>
 						</div>
 
 			</div>
@@ -105,3 +114,4 @@ function clearSearch() {
 	
 	</div>
 </div>
+
