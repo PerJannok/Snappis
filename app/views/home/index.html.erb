@@ -56,6 +56,18 @@
 		
 		document.getElementById("address").innerHTML = address;
 		
+		document.getElementById("name").innerHTML = place.name;
+		
+		var a = [];
+		a = document.getElementsByClassName("hidden_address");
+		for(i = 0;i < a.length; ++i) {
+        a[i].value = address;      
+    }
+		a = document.getElementsByClassName("hidden_name");
+		for(i = 0;i < a.length; ++i) {
+        a[i].value = place.name;      
+    }
+		
 		var str = "";
 		for (var i=1; i<6; i++)
 		{
@@ -80,26 +92,53 @@ function clearSearch() {
 	document.getElementById('location_search') = '';
 	return false;
 }
+
+
+
+function addReviewButtonClicked(e) {
 	
+	if (!e) var e = window.event;
+	// e gives access to the event in all browsers
+	
+	e.cancelBubble = true;
+	if (e.stopPropagation) e.stopPropagation();
+	
+	add_review_form.submit();
+}
+
+
 -->
 </script>
+
 
 <a id="yelphref" href="" data-remote="true"></a>
 
 <div class="wrapper">
 	<div class="cards">
-		<div class="card">
-			<div class="card-header">
-			<div class="legend-indicator">
-			  <span>1</span>
-			</div>
+	<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "add_review_form"}) do |f| %>
+		<%= hidden_field_tag("hidden_address", "", {:class => "hidden_address"}) %>
+		<%= hidden_field_tag("hidden_name", "", {:class => "hidden_name"}) %>
+	<% end %>
 
-				 <div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button>Add Rating</button></div>								
+	<%= form_tag({:action => 'detail', :controller => 'locations'}, {:id => "card_form"}) do |f| %>
+		<div class="card" id="carddiv" onclick="card_form.submit();">
+			<div class="card-header">
+				<div class="legend-indicator">
+					<span>1</span>
+				</div>
+
+				<div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button id="addreviewbutton" type="button" onclick="addReviewButtonClicked(event);">Add Rating</button></div>
+	
 			</div>
 			<div class="card-content"  		
-					<div class="card-image"></div>
-						<h5>Legal Seafoods, <span>Boston Harbor</span></h5>
+						<div class="card-image"></div>
+						
+						<p class="name" id="name"></p>
 						<p class="address" id="address"></p>
+						
+						<%= hidden_field_tag("hidden_address", "", {:class => "hidden_address"}) %>
+						<%= hidden_field_tag("hidden_name", "", {:class => "hidden_name"}) %>
+
 
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem explicabo possimus qui nesciunt. Ipsa, tempora, et mollitia quam dolores magnam temporibus necessitatibus quisquam ad repellendus natus facere voluptates quasi commodi.</p>
 
@@ -107,10 +146,9 @@ function clearSearch() {
 							Google<div class="google" id="google"></div>
 							Yelp<div class="yelp" id="yelpdiv"></div>
 						</div>
-
 			</div>
-
 		</div>
+	<% end %>
 	
 	</div>
 </div>

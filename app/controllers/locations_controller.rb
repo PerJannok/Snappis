@@ -149,9 +149,9 @@ class LocationsController < ApplicationController
     
     if current_user.present?
     	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
+    else
+    	@rating = Rating.new(:user_id => '9999', :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
     end
-    
-    #puts params.inspect
     
     respond_to do |format|
       if @location.save
@@ -209,6 +209,29 @@ class LocationsController < ApplicationController
 #      format.json { head :no_content }
 #    end
 
+  end
+  
+  def detail
+  	puts "loc controller detail"
+  	@location = Location.new(:address => params[:hidden_address], :location_name => params[:hidden_name])
+  	
+
+  	
+  	respond_to do |format|
+      format.html { render :template => "locations/detail" }
+      format.json { render json: @location }
+    end
+  end
+  
+  def add_review
+  	puts "loc controller add_review"
+  	
+  	@location = Location.new(:address => params[:hidden_address], :location_name => params[:hidden_name])
+  	
+  	respond_to do |format|
+      format.html { render :template => "locations/addreview", :locals => {:location => @location}}
+      format.json { render json: @location }
+    end
   end
   
 	def searchyelp

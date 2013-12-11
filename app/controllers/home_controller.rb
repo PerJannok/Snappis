@@ -1,9 +1,7 @@
 class HomeController < ApplicationController
 
   def index
-  	puts "home controller index"
-  	#@location = Location.new
-
+  	
 
   end
   
@@ -16,5 +14,5 @@ class HomeController < ApplicationController
       format.json { render json: @location }
     end
   end
-
+  
 end

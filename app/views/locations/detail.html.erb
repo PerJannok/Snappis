@@ -1,0 +1,18 @@
+<h1>Detail</h1>
+<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "detail_form"}) do |f| %>
+	<%= submit_tag("Add Review") %>
+	
+	<%= hidden_field_tag(:hidden_name, @location.location_name) %>
+	<%= hidden_field_tag(:hidden_address, @location.address) %>
+	
+  <p>
+    <b>Address:</b>
+    <%= @location.address %>
+  </p>
+
+  <p>
+    <b>Location name:</b>
+    <%= @location.location_name %>
+  </p>
+  
+<% end %>

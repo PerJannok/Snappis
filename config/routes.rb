@@ -9,11 +9,14 @@ ReviewSite::Application.routes.draw do
   
   get '/locations/searchyelp', to: 'locations#searchyelp'
   
-  resources :locations
-  match '/locations/new' => 'locations#new'
-  match '/locations' => 'locations#new'
+  post '/location/detail', to: 'locations#detail'
+  post '/location/add_review', to: 'locations#add_review'
   
-  
+  resources :locations do
+  	match '/locations/new' => 'locations#new'
+  	match '/locations' => 'locations#new'
+  end
+
   resources :rating
   match '/rating/:id/edit' => 'rating#update'
   match '/rating/new' => 'rating#create'
