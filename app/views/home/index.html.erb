@@ -1,3 +1,57 @@
+<div id="googlemap" style="margin:0 auto; width:60%; height: 360px"></div>
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
+
+<script type="text/javascript">	
+<!--
+
+var defaultLat = "42.35843";
+var defaultLong = "-71.05977";
+var defaultZoom = 16;
+
+// create map and add controls
+var mapOptions = {
+	zoom: defaultZoom,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	scrollwheel: false,
+	scaleControl: false
+};
+
+document.getElementById('googlemap').style.display = 'none';
+
+var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
+
+
+function showMap(showLat,showLong) {
+
+	document.getElementById('googlemap').style.display = 'block';
+
+	// set center point of map to be of the Marker or the Default City
+	var centrePoint = new google.maps.LatLng(showLat, showLong);
+	map.setCenter(centrePoint);
+
+	marker = new google.maps.Marker({
+		map: map,
+		draggable: false,
+		position: centrePoint
+	});
+
+	var defaultImage = new google.maps.MarkerImage("http://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+		new google.maps.Size(71, 71),
+		new google.maps.Point(0, 0),
+		new google.maps.Point(17, 34),
+		new google.maps.Size(35, 35));
+	marker.setIcon(defaultImage);
+	
+}
+
+//showMap(defaultLat, defaultLong);
+
+-->
+</script>
+
+
+
 <div class="hero">
 <div class="hero-inner">
 <h1>Rate and review Places</h1>
@@ -19,74 +73,10 @@
 </div>
 </div>
 
-<script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
 
 <script type="text/javascript">	
 <!--
-	// Address Autocomplete
-	var input = document.getElementById('location_search');
-	var autocomplete = new google.maps.places.Autocomplete(input);
-	
-	// Autocomplete Listener
-	google.maps.event.addListener(autocomplete, 'place_changed', function() {
-		place = autocomplete.getPlace();
-		
-		//document.getElementById("location_lat").value = place.geometry.location.lat();
-		//document.getElementById("location_lng").value = place.geometry.location.lng();
 
-		var address = '';
-		if (place.address_components) {
-		  address = [(place.address_components[0] &&
-		              place.address_components[0].short_name || ', '),
-		             (place.address_components[1] &&
-		              place.address_components[1].short_name || ', '),
-		             (place.address_components[2] &&
-		              place.address_components[2].short_name || '')
-		            ].join(' ');
-		}
-		
-//		for(var index in place.address_components) {
-//			alert( index + " : " + place.address_components[index].long_name + "\n");
-//		}
-
-		//rating from google: place.rating
-		//alert('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
-		
-		//alert('rating: ' + Math.round(place.rating));
-		
-		document.getElementById("address").innerHTML = address;
-		
-		document.getElementById("name").innerHTML = place.name;
-		
-		var a = [];
-		a = document.getElementsByClassName("hidden_address");
-		for(i = 0;i < a.length; ++i) {
-        a[i].value = address;      
-    }
-		a = document.getElementsByClassName("hidden_name");
-		for(i = 0;i < a.length; ++i) {
-        a[i].value = place.name;      
-    }
-		
-		var str = "";
-		for (var i=1; i<6; i++)
-		{
-			if (i == Math.round(place.rating))  {
-				str += "<input name='star' type='radio' class='star' disabled='disabled' checked='checked'>";
-				}
-			else {
-				str += "<input name='star' type='radio' class='star' disabled='disabled'>";
-			}
-		}
-		
-		document.getElementById("google").innerHTML = str;
-		
-		
-		document.getElementById("yelphref").href = "/locations/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
-		document.getElementById("yelphref").click();
-		
-
-	}); 	
 
 function clearSearch() {
 	document.getElementById('location_search') = '';
@@ -105,7 +95,6 @@ function addReviewButtonClicked(e) {
 	
 	add_review_form.submit();
 }
-
 
 -->
 </script>
