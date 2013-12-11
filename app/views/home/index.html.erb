@@ -1,6 +1,13 @@
-<div id="googlemap" style="margin:0 auto; width:60%; height: 360px"></div>
+<p><div id="googlemap" style="margin:auto; width:60%; height: 360px"></div></p>
 
 <script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
+
+<style type="text/css">
+	/** FIX for Bootstrap and Google Maps Info window styes problem **/
+	img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+	max-width: none;
+}
+</style>
 
 <script type="text/javascript">	
 <!--
@@ -20,73 +27,35 @@ var mapOptions = {
 document.getElementById('googlemap').style.display = 'none';
 
 var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
+var infowindow = new google.maps.InfoWindow();
 
-// Address Autocomplete
-var input = document.getElementById('location_search');
-var autocomplete = new google.maps.places.Autocomplete(input);
-	
-// Autocomplete Listener
-google.maps.event.addListener(autocomplete, 'place_changed', function() {
+function showMap(showLat,showLong, iconurl, name, address) {
 
-	alert('place changed');
-	place = autocomplete.getPlace();
-	
-	//document.getElementById("location_lat").value = place.geometry.location.lat();
-	//document.getElementById("location_lng").value = place.geometry.location.lng();
-
-	var address = '';
-	if (place.address_components) {
-	  address = [(place.address_components[0] &&
-	              place.address_components[0].short_name || ', '),
-	             (place.address_components[1] &&
-	              place.address_components[1].short_name || ', '),
-	             (place.address_components[2] &&
-	              place.address_components[2].short_name || '')
-	            ].join(' ');
-	}
-		
-	//rating from google: place.rating
-	document.getElementById("google").innerHTML = place.rating;
-		
-	document.getElementById("address").innerHTML = address;
-	document.getElementById("name").innerHTML = place.name;
-		
-	var a = [];
-	a = document.getElementsByClassName("hidden_address");
-	for(i = 0;i < a.length; ++i) {
-      a[i].value = address;      
-  }
-	a = document.getElementsByClassName("hidden_name");
-	for(i = 0;i < a.length; ++i) {
-      a[i].value = place.name;      
-  }
-
-	document.getElementById("yelphref").href = "/locations/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
-	document.getElementById("yelphref").click();
-
-});		
-		
-function showMap(showLat,showLong) {
-
-	document.getElementById('googlemap').style.display = 'block';
-
-	// set center point of map to be of the Marker or the Default City
+	// set center point of map to be of the marker
 	var centrePoint = new google.maps.LatLng(showLat, showLong);
-	map.setCenter(centrePoint);
-
+	
 	marker = new google.maps.Marker({
 		map: map,
 		draggable: false,
 		position: centrePoint
 	});
-
-	var defaultImage = new google.maps.MarkerImage("http://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
-		new google.maps.Size(71, 71),
-		new google.maps.Point(0, 0),
-		new google.maps.Point(17, 34),
-		new google.maps.Size(35, 35));
-	marker.setIcon(defaultImage);
 	
+	marker.setIcon(/** @type {google.maps.Icon} */({
+    url: iconurl,
+    size: new google.maps.Size(71, 71),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(17, 34),
+    scaledSize: new google.maps.Size(35, 35)
+  }));
+  
+  infowindow.setContent('<div><strong>' + name + '</strong><br>' + address);
+  infowindow.open(map, marker);
+
+	document.getElementById('googlemap').style.display = 'block';
+	google.maps.event.trigger(map, "resize");
+	map.setCenter(centrePoint);
+
+
 }
 
 //showMap(defaultLat, defaultLong);
@@ -121,12 +90,63 @@ function showMap(showLat,showLong) {
 <script type="text/javascript">	
 <!--
 
+// Address Autocomplete
+var input = document.getElementById('location_search');
+var autocomplete = new google.maps.places.Autocomplete(input);
+	
+// Autocomplete Listener
+google.maps.event.addListener(autocomplete, 'place_changed', function() {
+
+	place = autocomplete.getPlace();
+	
+	//document.getElementById("location_lat").value = place.geometry.location.lat();
+	//document.getElementById("location_lng").value = place.geometry.location.lng();
+
+	var address = '';
+	if (place.address_components) {
+	  address = [(place.address_components[0] &&
+	              place.address_components[0].short_name || ', '),
+	             (place.address_components[1] &&
+	              place.address_components[1].short_name || ', '),
+	             (place.address_components[2] &&
+	              place.address_components[2].short_name || '')
+	            ].join(' ');
+	}
+		
+//		for(var index in place.address_components) {
+//			alert( index + " : " + place.address_components[index].long_name + "\n");
+//		}
+	
+	showMap(place.geometry.location.lat(), place.geometry.location.lng(), place.icon, place.name, address);
+	
+	document.getElementById("address").innerHTML = address;
+	document.getElementById("name").innerHTML = place.name;
+		
+	var a = [];
+	a = document.getElementsByClassName("hidden_address");
+	for(i = 0;i < a.length; ++i) {
+      a[i].value = address;      
+  }
+	a = document.getElementsByClassName("hidden_name");
+	for(i = 0;i < a.length; ++i) {
+      a[i].value = place.name;      
+  }
+		
+	//rating from google: place.rating
+	document.getElementById("google").innerHTML = place.rating;
+	
+	//check yelp rating
+	document.getElementById("yelphref").href = "/locations/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
+	document.getElementById("yelphref").click();
+
+		
+}); 	
+
 
 function clearSearch() {
 	document.getElementById('location_search') = '';
 	return false;
 }
-
 
 
 function addReviewButtonClicked(e) {
@@ -139,6 +159,7 @@ function addReviewButtonClicked(e) {
 	
 	add_review_form.submit();
 }
+
 
 -->
 </script>
