@@ -15,7 +15,10 @@ class Location
 	field :lng, :type => Float, :default => ""
 	field :created_at, :type => Time, :default => ""
 	field :updated_at, :type => Time, :default => ""
-
+	field :googleid, :type => String, :default => ""
+	field :googlereference, :type => String, :default => ""
+	field :yelpbusinessid, :type => String, :default => ""
+	
    
 	validates_presence_of :address
 	validates_presence_of :location_name
@@ -31,6 +34,9 @@ class Location
 	attr_accessible :country
 	attr_accessible :lat
 	attr_accessible :lng
+	attr_accessible :googleid
+	attr_accessible :googlereference
+	attr_accessible :yelpbusinessid
  
 	has_many :ratings
 	#has_many :raters, :through => :ratings, :source => :user

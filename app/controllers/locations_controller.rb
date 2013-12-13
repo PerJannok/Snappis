@@ -143,14 +143,32 @@ class LocationsController < ApplicationController
   # POST /locations.json
   def create
   	puts "loc controller create"
-  	puts params[:location_search]
   	
-    @location = Location.new(params[:location])
+  	loc = Location.where(:googleid => params[:hidden_googleid])
+  	
+		if loc.any?
+			puts "found record in db"
+			@location = loc.first
+		else
+  	
+    	@location = Location.new(params[:location])
+    
+    	@location.yelpbusinessid = params[:yelpbusinessid]
+    	@location.googleid = params[:googleid]
+    	@location.googlereference = params[:googlereference]
+    end
     
     if current_user.present?
     	@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
     else
-    	@rating = Rating.new(:user_id => '9999', :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
+    	string = "anon"
+		  length=6
+			chars = ("A".."Z").to_a
+			length.times do
+		  	string << chars[rand(chars.length-1)]
+			end
+			
+    	@rating = Rating.new(:user_id => string, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
     end
     
     respond_to do |format|
@@ -172,7 +190,52 @@ class LocationsController < ApplicationController
   # PUT /locations/1
   # PUT /locations/1.json
   def update
+  	puts "loc controller update"
+  	
     @location = Location.find(params[:id])
+    
+    
+    if current_user.present?
+    
+    	rat = Rating.where({:user_id => current_user.id, :location_id => @location.id})
+  	
+			if rat.any?
+				puts "found rating in db"
+				@rating = rat.first
+				
+				if @rating.update_attributes(params[:location])
+					puts "rating updated"
+				else
+					puts "could not update rating"
+				end
+				
+			else
+    		@rating = Rating.new(:user_id => current_user.id, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
+    	
+		  	if @rating.save
+		  		puts "rating saved"
+		  	else
+		  		puts "couldn't save rating"
+		  	end
+		  end
+    	
+    else
+    
+		  string = "anon"
+		  length=6
+			chars = ("A".."Z").to_a
+			length.times do
+		  	string << chars[rand(chars.length-1)]
+			end
+	    @rating = Rating.new(:user_id => string, :location_id => @location.id, :Cat1value => params[:starCat1], :Cat1comment => params[:Cat1Comment], :Cat2value => params[:starCat2], :Cat2comment => params[:Cat2Comment])
+	    
+     	if @rating.save
+	  		puts "rating saved"
+	  	else
+	  		puts "couldn't save rating"
+	  	end
+	    
+    end
 
     respond_to do |format|
       if @location.update_attributes(params[:location])
@@ -213,10 +276,16 @@ class LocationsController < ApplicationController
   
   def detail
   	puts "loc controller detail"
-  	@location = Location.new(:address => params[:hidden_address], :location_name => params[:hidden_name])
   	
-
+  	loc = Location.where(:googleid => params[:hidden_googleid])
   	
+		if loc.any?
+			puts "found record in db"
+			@location = loc.first
+		else
+			@location = Location.new(:googleid => params[:hidden_googleid], :googlereference => params[:hidden_googlereference], :yelpbusinessid => params[:hidden_yelpbusinessid2])
+		end
+	
   	respond_to do |format|
       format.html { render :template => "locations/detail" }
       format.json { render json: @location }
@@ -225,8 +294,15 @@ class LocationsController < ApplicationController
   
   def add_review
   	puts "loc controller add_review"
+
+  	loc = Location.where(:googleid => params[:hidden_googleid])
   	
-  	@location = Location.new(:address => params[:hidden_address], :location_name => params[:hidden_name])
+		if loc.any?
+			puts "found record in db"
+			@location = loc.first
+		else  	
+  		@location = Location.new(:googleid => params[:hidden_googleid], :googlereference => params[:hidden_googlereference], :yelpbusinessid => params[:hidden_yelpbusinessid1])
+  	end
   	
   	respond_to do |format|
       format.html { render :template => "locations/addreview", :locals => {:location => @location}}
@@ -238,12 +314,10 @@ class LocationsController < ApplicationController
 		
 #		puts "search yelp"
 #		puts params[:adr]
-#		puts params[:city]
-#		puts params[:state]
-#		puts params[:term]
 	
 		#@yelpresponse = Array.new
 		@yelpresponse = String.new()
+		@yelpbusinessid = String.new()
 		
 		client = Yelp::Client.new
 
@@ -281,6 +355,7 @@ class LocationsController < ApplicationController
 				#@yelpresponse << singlebusiness["name"]
 				#@yelpresponse << singlebusiness["rating"]
 				
+				@yelpbusinessid = singlebusiness["id"]
 				@yelpresponse = singlebusiness["rating"].to_s
 			end		
 			

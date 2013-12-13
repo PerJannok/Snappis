@@ -99,6 +99,7 @@ google.maps.event.addListener(autocomplete, 'place_changed', function() {
 
 	place = autocomplete.getPlace();
 	
+
 	//document.getElementById("location_lat").value = place.geometry.location.lat();
 	//document.getElementById("location_lng").value = place.geometry.location.lng();
 
@@ -123,13 +124,13 @@ google.maps.event.addListener(autocomplete, 'place_changed', function() {
 	document.getElementById("name").innerHTML = place.name;
 		
 	var a = [];
-	a = document.getElementsByClassName("hidden_address");
+	a = document.getElementsByClassName("hidden_googleid");
 	for(i = 0;i < a.length; ++i) {
-      a[i].value = address;      
+      a[i].value = place.id;      
   }
-	a = document.getElementsByClassName("hidden_name");
+	a = document.getElementsByClassName("hidden_googlereference");
 	for(i = 0;i < a.length; ++i) {
-      a[i].value = place.name;      
+      a[i].value = place.reference;      
   }
 		
 	//rating from google: place.rating
@@ -170,8 +171,9 @@ function addReviewButtonClicked(e) {
 <div class="wrapper">
 	<div class="cards">
 	<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "add_review_form"}) do |f| %>
-		<%= hidden_field_tag("hidden_address", "", {:class => "hidden_address"}) %>
-		<%= hidden_field_tag("hidden_name", "", {:class => "hidden_name"}) %>
+		<%= hidden_field_tag("hidden_yelpbusinessid1", "", {:class => "hidden_yelpbusinessid"}) %>
+		<%= hidden_field_tag("hidden_googleid", "", {:class => "hidden_googleid"}) %>
+		<%= hidden_field_tag("hidden_googlereference", "", {:class => "hidden_googlereference"}) %>
 	<% end %>
 
 	<%= form_tag({:action => 'detail', :controller => 'locations'}, {:id => "card_form"}) do |f| %>
@@ -189,16 +191,17 @@ function addReviewButtonClicked(e) {
 						
 						<p class="name" id="name"></p>
 						<p class="address" id="address"></p>
-						
-						<%= hidden_field_tag("hidden_address", "", {:class => "hidden_address"}) %>
-						<%= hidden_field_tag("hidden_name", "", {:class => "hidden_name"}) %>
+		
+						<%= hidden_field_tag("hidden_yelpbusinessid2", "", {:class => "hidden_yelpbusinessid"}) %>
+						<%= hidden_field_tag("hidden_googleid", "", {:class => "hidden_googleid"}) %>
+						<%= hidden_field_tag("hidden_googlereference", "", {:class => "hidden_googlereference"}) %>
 
 
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem explicabo possimus qui nesciunt. Ipsa, tempora, et mollitia quam dolores magnam temporibus necessitatibus quisquam ad repellendus natus facere voluptates quasi commodi.</p>
 
 						<div class="other-ratings">
 							Google<div class="google" id="google"></div>
-							Yelp<div class="yelp" id="yelpdiv"></div>
+							Yelp<div class="yelp" id="yelpdiv"></div><div class="yelpbusinessid" id="yelpbusinessid"></div>
 						</div>
 			</div>
 		</div>

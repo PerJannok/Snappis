@@ -1,4 +1,60 @@
+<script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
+
+<p><div id="googlemap" style="margin:auto; width:60%; height: 360px"></div></p>
+
+<script type="text/javascript">	
+<!--
+
+var defaultZoom = 16;
+
+// create map and add controls
+var mapOptions = {
+	zoom: defaultZoom,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	scrollwheel: false,
+	scaleControl: false
+};
+
+document.getElementById('googlemap').style.display = 'none';
+
+var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
+
+function initialize() {
+
+	var request = {
+    reference: '<%=escape_javascript @location.googlereference %>'
+	};
+
+  var service = new google.maps.places.PlacesService(map);
+
+	service.getDetails(request, function(place, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+    	
+      var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+      });
+      
+      document.getElementById("location_address").value = place.formatted_address;
+			document.getElementById("location_location_name").value = place.name;
+			
+			
+    }
+  });
+  
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+-->
+</script>
+
 <%= form_for(@location, html: { class: "form-horizontal" }) do |f| %>
+
+	<%= hidden_field_tag(:yelpbusinessid, @location.yelpbusinessid) %>
+	<%= hidden_field_tag(:googleid, @location.googleid) %>
+	<%= hidden_field_tag(:googlereference, @location.googlereference) %>
+
 
   <div class="row-fluid">
 
@@ -77,7 +133,15 @@
         <%= f.submit "Save Review", class: 'btn' %>
       </div>
       
-      
+			<p>
+				<b>Avg Cat1 rating:</b>
+				<%= @location.average_cat1_rating %>
+			</p>
+
+			<p>
+				<b>Avg Cat2 rating:</b>
+				<%= @location.average_cat2_rating %>
+			</p>      
       
     </div>
   </div>
