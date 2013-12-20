@@ -283,6 +283,7 @@ class LocationsController < ApplicationController
 			puts "found record in db"
 			@location = loc.first
 		else
+			puts "new location"  	
 			@location = Location.new(:googleid => params[:hidden_googleid], :googlereference => params[:hidden_googlereference], :yelpbusinessid => params[:hidden_yelpbusinessid2])
 		end
 	
@@ -295,14 +296,20 @@ class LocationsController < ApplicationController
   def add_review
   	puts "loc controller add_review"
 
-  	loc = Location.where(:googleid => params[:hidden_googleid])
-  	
-		if loc.any?
-			puts "found record in db"
-			@location = loc.first
-		else  	
-  		@location = Location.new(:googleid => params[:hidden_googleid], :googlereference => params[:hidden_googlereference], :yelpbusinessid => params[:hidden_yelpbusinessid1])
-  	end
+		if !params[:hidden_googleid].nil?
+	  	loc = Location.where(:googleid => params[:hidden_googleid])
+
+			if loc.any?
+				puts "found record in db"
+				@location = loc.first
+			else
+				puts "new location"  	
+				@location = Location.new(:googleid => params[:hidden_googleid], :googlereference => params[:hidden_googlereference], :yelpbusinessid => params[:hidden_yelpbusinessid1])
+			end
+	  else
+	  	@location = Location.new(:googleid => "", :googlereference => "", :yelpbusinessid => "")
+		end
+		 	
   	
   	respond_to do |format|
       format.html { render :template => "locations/addreview", :locals => {:location => @location}}
@@ -312,7 +319,7 @@ class LocationsController < ApplicationController
   
 	def searchyelp
 		
-#		puts "search yelp"
+		puts "loc cntrl search yelp"
 #		puts params[:adr]
 	
 		#@yelpresponse = Array.new
@@ -361,7 +368,21 @@ class LocationsController < ApplicationController
 			
 		end
 		
+		puts "search yelp done"
+		puts @yelpresponse
+		
 	end
 	
+  def searchresult
+   puts "loc cntrl search result"
+   
+   @searchterm = params[:location_search]
+   @googleref = params[:hidden_googlereference]
+   
+   respond_to do |format|
+			format.html # searchresult.html.erb
+		end
+    
+  end
   
 end

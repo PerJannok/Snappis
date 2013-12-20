@@ -1,0 +1,212 @@
+<script src="https://rawgithub.com/janl/mustache.js/master/mustache.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>
+
+<script type="text/javascript">	
+<!--
+function addReviewButtonClicked(e) {
+	
+	if (!e) var e = window.event;
+	// e gives access to the event in all browsers
+	
+	e.cancelBubble = true;
+	if (e.stopPropagation) e.stopPropagation();
+	
+	add_review_form.submit();
+}
+-->
+</script>
+
+<p><div id="googlemap" style="margin:auto; width:60%; height: 360px"></div></p>
+
+<script id="resultTpl" type="text/template">
+{{#musk}}
+<div class="wrapper">
+	<div class="cards">
+	<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "add_review_form"}) do |f| %>
+		<%= hidden_field_tag("hidden_googleid", "{{id}}", {:class => "hidden_googleid"}) %>
+    <%= hidden_field_tag("hidden_yelpbusinessid", "", {:class => "hidden_yelpbusinessid"}) %>
+		<%= hidden_field_tag("hidden_googlereference", "{{reference}}", {:class => "hidden_googlereference"}) %>
+	<% end %>
+
+	<%= form_tag({:action => 'detail', :controller => 'locations'}, {:id => "card_form"}) do |f| %>
+		<div class="card" id="carddiv" onclick="card_form.submit();">
+			<div class="card-header">
+				<div class="legend-indicator">
+					<span>1</span>
+				</div>
+
+				<div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button id="addreviewbutton" type="button" onclick="addReviewButtonClicked(event);">Add Rating</button></div>
+	
+			</div>
+			<div class="card-content"  		
+						<div class="card-image"></div>
+						
+						<p class="name" id="name">{{name}}</p>
+						<p class="address" id="address">{{formatted_address}}</p>
+		
+						<%= hidden_field_tag("hidden_googleid", "{{id}}", {:class => "hidden_googleid"}) %>
+						<%= hidden_field_tag("hidden_yelpbusinessid", "", {:class => "hidden_yelpbusinessid"}) %>
+						<%= hidden_field_tag("hidden_googlereference", "{{reference}}", {:class => "hidden_googlereference"}) %>
+	
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem explicabo possimus qui nesciunt. Ipsa, tempora, et mollitia quam dolores magnam temporibus necessitatibus quisquam ad repellendus natus facere voluptates quasi commodi.</p>
+
+						<div class="other-ratings">
+							Google<div class="googlerating" id="googlerating">{{rating}}</div>
+							Yelp<div class="yelprating" id="yelprating"></div>
+						</div>
+			</div>
+		</div>
+	<% end %>
+	
+	</div>
+</div>
+{{/musk}}
+
+</script>
+
+
+<style type="text/css">
+	/** FIX for Bootstrap and Google Maps Info window styes problem **/
+	img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+	max-width: none;
+}
+</style>
+
+<div id="resultsArea"></div>
+
+<script type="text/javascript">	
+<!--
+var infowindow = new google.maps.InfoWindow();
+var template = document.getElementById('resultTpl').innerHTML;
+var defaultZoom = 16;
+
+// create map and add controls
+var mapOptions = {
+	zoom: defaultZoom,
+	mapTypeId: google.maps.MapTypeId.ROADMAP,
+	scrollwheel: false,
+	scaleControl: false
+};
+
+var map = new google.maps.Map(document.getElementById('googlemap'),mapOptions);
+var service = new google.maps.places.PlacesService(map);
+
+var googleref = '<%= @googleref %>';
+
+if (!googleref || googleref.length == 0 || googleref==null || googleref == 'undefined') {
+
+  //alert('text search');
+
+	var defaultLat = "42.35843";
+	var defaultLong = "-71.05977";
+	var searchloc = new google.maps.LatLng(defaultLat,defaultLong);
+	
+	var request = {
+    location: searchloc,
+    radius: '2',
+    query: '<%= @searchterm %>'
+  };
+  
+  var arr = [];
+  
+  service.textSearch(request, function(results, status) {
+  	
+  	if (status != google.maps.places.PlacesServiceStatus.OK) {
+  	
+  		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post"  style="display:none;"></form>';
+  		document.forms['hiddenform'].submit();
+  	
+  	} else {
+  	
+			arr = {musk: results};
+			var bounds = new google.maps.LatLngBounds();
+			
+			for (var i = 0; i < results.length; i++) {
+				var place = results[i];
+
+				marker = new google.maps.Marker({
+					map: map,
+					draggable: false,
+					position: place.geometry.location
+				});
+				
+		    marker.setIcon(/** @type {google.maps.Icon} */({
+					url: place.icon,
+					size: new google.maps.Size(71, 71),
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(17, 34),
+					scaledSize: new google.maps.Size(35, 35)
+				}));
+			
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.setContent(place.name);
+					infowindow.open(map, this);
+				});
+				
+				bounds.extend(place.geometry.location);
+
+			}
+			
+			map.fitBounds(bounds);
+
+			var output = Mustache.render(template, arr);
+			document.getElementById('resultsArea').innerHTML = output;
+		}  
+  });
+  
+} else {
+
+  //alert('ref search');
+  
+	var request = {
+    reference: googleref
+  };
+  
+  var arr = [];
+  
+  service.getDetails(request, function(place, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+    
+    	arr = {musk: [place]};
+    
+    	var marker = new google.maps.Marker({
+        map: map,
+				draggable: false,
+        position: place.geometry.location
+      });
+      
+      marker.setIcon(/** @type {google.maps.Icon} */({
+				url: place.icon,
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(35, 35)
+			}));
+      
+			map.setCenter(place.geometry.location);
+      
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+      });
+      
+			var output = Mustache.render(template, arr);
+			document.getElementById('resultsArea').innerHTML = output;
+    }
+  });
+  
+}
+
+//alert("musk: " + musk.musk[0].firstName);
+//var output = Mustache.render(template, musk);
+//document.getElementById('resultsArea').innerHTML = output;
+
+-->
+</script>
+
+
+
+
+  
+
+

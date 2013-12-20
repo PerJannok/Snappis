@@ -56,6 +56,15 @@ google.maps.event.addDomListener(window, 'load', initialize);
 	<%= hidden_field_tag(:hidden_googleid, @location.googleid) %>
 	<%= hidden_field_tag(:hidden_googlereference, @location.googlereference) %>
 	
+	<!--
+	<br>
+	<b>googleref:</b><%= @location.googlereference %>
+	<br>
+	<b>googleid:</b><%= @location.googleid %>
+	<br>
+	<b>yelpid:</b><%= @location.yelpbusinessid %>
+	-->
+	
 	<br>
 	<b>Name:</b><p class="name" id="name"></p>
 	<b>Address:</b><p class="address" id="address"></p>
