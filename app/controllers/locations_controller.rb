@@ -18,12 +18,14 @@ class LocationsController < ApplicationController
   # GET /locations/1
   # GET /locations/1.json
   def show
-    @location = Location.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @location }
-    end
+	  @location = Location.find(params[:id])
+	
+	  respond_to do |format|
+	    format.html # show.html.erb
+	    format.json { render json: @location }
+	  end
+
   end
 
   # GET /locations/new
@@ -32,7 +34,7 @@ class LocationsController < ApplicationController
   
   	puts "loc controller new"
   
-	  @stored_locations = Location.all.each
+#	  @stored_locations = Location.all.each
 	  #@stored_locations = Array.new
 
 	  
@@ -120,7 +122,7 @@ class LocationsController < ApplicationController
 #		response["businesses"].each { |x| puts x }
 		
 
-		puts params['location_search']
+#		puts params['location_search']
 
 
 
@@ -318,17 +320,13 @@ class LocationsController < ApplicationController
   end
   
 	def searchyelp
-		
 		puts "loc cntrl search yelp"
-#		puts params[:adr]
 	
-		#@yelpresponse = Array.new
 		@yelpresponse = String.new()
 		@yelpbusinessid = String.new()
 		
 		client = Yelp::Client.new
 
-# search for businesses via location (address, neighbourhood, city, state, zip, country, latitude, longitude)'
 		request = Yelp::V2::Search::Request::Location.new(
 					     :address => params[:adr],
 					     :city => params[:city],
@@ -358,9 +356,9 @@ class LocationsController < ApplicationController
 			adr1 = params[:adr].sub(/Street/, 'St')
 			adr2 = params[:adr].sub(/ St/, ' Street')
 			
+			#for all found businesses, check if address is the same as searched for,
+			#if so return rating for that business
 			if singlebusiness["location"]["display_address"][0] == params[:adr] or singlebusiness["location"]["display_address"][0] == adr1 or singlebusiness["location"]["display_address"][0] == adr2
-				#@yelpresponse << singlebusiness["name"]
-				#@yelpresponse << singlebusiness["rating"]
 				
 				@yelpbusinessid = singlebusiness["id"]
 				@yelpresponse = singlebusiness["rating"].to_s
@@ -368,18 +366,38 @@ class LocationsController < ApplicationController
 			
 		end
 		
-		puts "search yelp done"
-		puts @yelpresponse
+		puts "yelp search done."
 		
 	end
 	
+	def searchyelp_byid
+		puts "loc cntrl searchyelp_byid"
+
+		@yelpresponse = String.new()
+		
+		client = Yelp::Client.new
+		
+		# Make request to retrieve details of business vi yelp business id 
+		request = Yelp::V2::Business::Request::Id.new(
+				:yelp_business_id => params[:yelpid],
+				:consumer_key     => 'bfGBEV3Ej3EQqo2vGta9ow',
+				:consumer_secret  => 'imgLOjWNHYERDU0D2FCJkMTlhf4',
+				:token            => 'vgAIJOqBJbzIY_9H5pTsheSP93xgUQzj',
+				:token_secret     => 'vDGFGE9pYzyGPdTVD8f1VYkg26Q')
+
+		singlebusiness = client.search(request)
+		
+		@yelpresponse = singlebusiness["rating"]
+	end
+	
   def searchresult
-   puts "loc cntrl search result"
-   
-   @searchterm = params[:location_search]
-   @googleref = params[:hidden_googlereference]
-   
-   respond_to do |format|
+		puts "loc cntrl search result"
+
+		@searchterm = params[:location_search]
+		@googleref = params[:hidden_googlereference]
+
+
+		respond_to do |format|
 			format.html # searchresult.html.erb
 		end
     

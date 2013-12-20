@@ -6,7 +6,7 @@ function ValidateForm(){
 
 	var form = document.forms['searchform'];
 	if ((form['location_search'].value == "") || !(form['location_search'].value)){
-		 alert("You did not provide search term!");
+		 alert("You did not provide a search term!");
 		 return(false);
 	} else {
 		return(true);
@@ -51,17 +51,6 @@ var autocomplete = new google.maps.places.Autocomplete(input);
 google.maps.event.addListener(autocomplete, 'place_changed', function() {
 
 	place = autocomplete.getPlace();
-	
-	var address = '';
-	if (place.address_components) {
-	  address = [(place.address_components[0] &&
-	              place.address_components[0].short_name || ', '),
-	             (place.address_components[1] &&
-	              place.address_components[1].short_name || ', '),
-	             (place.address_components[2] &&
-	              place.address_components[2].short_name || '')
-	            ].join(' ');
-	}
 		
 	var a = [];
 	a = document.getElementsByClassName("hidden_googleid");
@@ -72,13 +61,6 @@ google.maps.event.addListener(autocomplete, 'place_changed', function() {
 	for(i = 0;i < a.length; ++i) {
       a[i].value = place.reference;      
   }
-		
-	
-	//check yelp rating
-	/*
-	document.getElementById("yelphref").href = "/location/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
-	document.getElementById("yelphref").click();
-	*/
 
 	document.forms['searchform'].submit();
 		
@@ -92,9 +74,6 @@ function clearSearch() {
 
 -->
 </script>
-
-
-<a id="yelphref" href="" data-remote="true"></a>
 
 
 

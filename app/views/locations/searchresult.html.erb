@@ -52,7 +52,6 @@ function addReviewButtonClicked(e) {
 
 						<div class="other-ratings">
 							Google<div class="googlerating" id="googlerating">{{rating}}</div>
-							Yelp<div class="yelprating" id="yelprating"></div>
 						</div>
 			</div>
 		</div>
@@ -97,6 +96,8 @@ var googleref = '<%= @googleref %>';
 
 if (!googleref || googleref.length == 0 || googleref==null || googleref == 'undefined') {
 
+	//no google reference, doing a google search for specified search string
+	
   //alert('text search');
 
 	var defaultLat = "42.35843";
@@ -115,10 +116,14 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
   	
   	if (status != google.maps.places.PlacesServiceStatus.OK) {
   	
-  		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post"  style="display:none;"></form>';
+  		//no google place found for search string!
+  	
+  		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post" style="display:none;"></form>';
   		document.forms['hiddenform'].submit();
   	
   	} else {
+  	
+  		//set of google places found, processing...
   	
 			arr = {musk: results};
 			var bounds = new google.maps.LatLngBounds();
@@ -160,6 +165,8 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
   
 } else {
 
+	//google reference passed as parameter, get details from google
+	
   //alert('ref search');
   
 	var request = {
@@ -202,10 +209,6 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
   });
   
 }
-
-//alert("musk: " + musk.musk[0].firstName);
-//var output = Mustache.render(template, musk);
-//document.getElementById('resultsArea').innerHTML = output;
 
 -->
 </script>

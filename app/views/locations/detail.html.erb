@@ -64,8 +64,22 @@ function initialize() {
       
       document.getElementById("address").innerHTML = place.formatted_address;
 			document.getElementById("name").innerHTML = place.name;
+			document.getElementById("googlerating").innerHTML = place.rating;
+			
+			//check yelp rating
+			var yelpid = '<%=escape_javascript @location.yelpbusinessid %>';
+			if (yelpid && yelpid.length != 0 && yelpid != null && yelpid != 'undefined') {
+				document.getElementById("yelphref").href = "/locations/searchyelp_byid?yelpid=" + yelpid;
+				document.getElementById("yelphref").click();			
+			}	else {
+				document.getElementById("yelphref").href = "/locations/searchyelp?term=" + place.name + "&state=" + place.address_components[3].short_name + "&city=" + place.address_components[2].short_name + "&adr=" + place.address_components[0].long_name + ' ' + place.address_components[1].short_name;
+				document.getElementById("yelphref").click();
+			}
+			
     }
   });
+
+
   
 }
 
@@ -74,7 +88,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
 -->
 </script>
 
-
+<a id="yelphref" href="" data-remote="true"></a>
+ 
 <h1>Detail</h1>
 <%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "detail_form"}) do |f| %>
 	<%= submit_tag("Add Review") %>
@@ -95,6 +110,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
 	<br>
 	<b>Name:</b><p class="name" id="name"></p>
 	<b>Address:</b><p class="address" id="address"></p>
+	<b>Google rating:</b><p class="googlerating" id="googlerating"></p>
+	<b>Yelp rating:</b><p class="yelprating" id="yelprating"></p>
 	
   <p>
     <b>Avg Cat1 rating:</b>
