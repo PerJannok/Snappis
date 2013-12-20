@@ -80,6 +80,8 @@ var infowindow = new google.maps.InfoWindow();
 var template = document.getElementById('resultTpl').innerHTML;
 var defaultZoom = 16;
 
+document.getElementById('googlemap').style.display = 'none';
+
 // create map and add controls
 var mapOptions = {
 	zoom: defaultZoom,
@@ -147,6 +149,8 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
 
 			}
 			
+			document.getElementById('googlemap').style.display = 'block';
+			google.maps.event.trigger(map, "resize");
 			map.fitBounds(bounds);
 
 			var output = Mustache.render(template, arr);
@@ -183,6 +187,8 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
 				scaledSize: new google.maps.Size(35, 35)
 			}));
       
+			document.getElementById('googlemap').style.display = 'block';
+			google.maps.event.trigger(map, "resize");
 			map.setCenter(place.geometry.location);
       
       google.maps.event.addListener(marker, 'click', function() {
