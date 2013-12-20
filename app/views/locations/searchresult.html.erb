@@ -3,7 +3,7 @@
 
 <script type="text/javascript">	
 <!--
-function addReviewButtonClicked(e) {
+function addReviewButtonClicked(e, ref) {
 	
 	if (!e) var e = window.event;
 	// e gives access to the event in all browsers
@@ -11,7 +11,8 @@ function addReviewButtonClicked(e) {
 	e.cancelBubble = true;
 	if (e.stopPropagation) e.stopPropagation();
 	
-	add_review_form.submit();
+	var formname = 'addreviewform_' + ref;
+	document.forms[formname].submit();
 }
 -->
 </script>
@@ -22,20 +23,20 @@ function addReviewButtonClicked(e) {
 {{#musk}}
 <div class="wrapper">
 	<div class="cards">
-	<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "add_review_form"}) do |f| %>
+	<%= form_tag({:action => 'add_review', :controller => 'locations'}, {:id => "addreviewform_{{reference}}"}) do |f| %>
 		<%= hidden_field_tag("hidden_googleid", "{{id}}", {:class => "hidden_googleid"}) %>
     <%= hidden_field_tag("hidden_yelpbusinessid", "", {:class => "hidden_yelpbusinessid"}) %>
 		<%= hidden_field_tag("hidden_googlereference", "{{reference}}", {:class => "hidden_googlereference"}) %>
 	<% end %>
 
-	<%= form_tag({:action => 'detail', :controller => 'locations'}, {:id => "card_form"}) do |f| %>
-		<div class="card" id="carddiv" onclick="card_form.submit();">
+	<%= form_tag({:action => 'detail', :controller => 'locations'}, {:id => "detailform_{{reference}}"}) do |f| %>
+		<div class="card" id="carddiv" onclick="document.forms['detailform_{{reference}}'].submit();">
 			<div class="card-header">
 				<div class="legend-indicator">
 					<span>1</span>
 				</div>
 
-				<div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button id="addreviewbutton" type="button" onclick="addReviewButtonClicked(event);">Add Rating</button></div>
+				<div class="rating">Member Rating &#x2605; &#x2605; &#x2605; &#9734; &#9734;<button id="addreviewbutton" type="button" onclick="addReviewButtonClicked(event, {{reference}});">Add Rating</button></div>
 	
 			</div>
 			<div class="card-content"  		
