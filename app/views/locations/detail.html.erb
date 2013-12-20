@@ -2,6 +2,13 @@
 
 <p><div id="googlemap" style="margin:auto; width:60%; height: 360px"></div></p>
 
+<style type="text/css">
+	/** FIX for Bootstrap and Google Maps Info window styes problem **/
+	img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
+	max-width: none;
+}
+</style>
+
 <script type="text/javascript">	
 <!--
 
@@ -14,6 +21,8 @@ var mapOptions = {
 	scrollwheel: false,
 	scaleControl: false
 };
+
+var infowindow = new google.maps.InfoWindow();
 
 document.getElementById('googlemap').style.display = 'none';
 
@@ -30,9 +39,27 @@ function initialize() {
 	service.getDetails(request, function(place, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
     	
-      var marker = new google.maps.Marker({
+    	var marker = new google.maps.Marker({
         map: map,
+				draggable: false,
         position: place.geometry.location
+      });
+      
+      marker.setIcon(/** @type {google.maps.Icon} */({
+				url: place.icon,
+				size: new google.maps.Size(71, 71),
+				origin: new google.maps.Point(0, 0),
+				anchor: new google.maps.Point(17, 34),
+				scaledSize: new google.maps.Size(35, 35)
+			}));
+      
+			document.getElementById('googlemap').style.display = 'block';
+			google.maps.event.trigger(map, "resize");
+			map.setCenter(place.geometry.location);
+      
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
       });
       
       document.getElementById("address").innerHTML = place.formatted_address;
