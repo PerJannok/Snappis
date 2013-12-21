@@ -119,7 +119,7 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
   	
   		//no google place found for search string!
   	
-  		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post" style="display:none;"></form>';
+  		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post" style="display:none;"><input id="searchterm" name="searchterm" type="hidden" value="<%= @searchterm %>"></form>';
   		document.forms['hiddenform'].submit();
   	
   	} else {

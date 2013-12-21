@@ -37,6 +37,7 @@ function initialize() {
 		var defLat = "42.35843";
 		var defLong = "-71.05977";			
 		var defaultPoint = new google.maps.LatLng(defLat, defLong);
+		var geocoder = new google.maps.Geocoder();
   
   	var marker = new google.maps.Marker({
       map: map,
@@ -51,12 +52,39 @@ function initialize() {
 		document.getElementById("location_lat").value = defLat;
 		document.getElementById("location_lng").value = defLong;
 		
+		document.getElementById("location_location_name").value = '<%= @searchterm %>';
+
+		//set address field to default point
+		var latlng = new google.maps.LatLng(defLat, defLong);
+	  geocoder.geocode({'latLng': latlng}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+	      if (results[1]) {
+					document.getElementById("location_address").value = results[1].formatted_address;
+	      }
+	    } else {
+	      alert("Geocoder failed due to: " + status);
+	    }
+	  });
+		
 		// add a drag listener to the mapmarker
 		google.maps.event.addListener(marker, "dragend", function() {
 			var point = marker.getPosition();
 			map.panTo(point);
 			document.getElementById("location_lat").value = point.lat();
 			document.getElementById("location_lng").value = point.lng();
+			
+			//update address field according to moved marker
+			var latlng = new google.maps.LatLng(point.lat(), point.lng());
+		  geocoder.geocode({'latLng': latlng}, function(results, status) {
+		    if (status == google.maps.GeocoderStatus.OK) {
+		      if (results[1]) {
+						document.getElementById("location_address").value = results[1].formatted_address;
+		      }
+		    } else {
+		      alert("Geocoder failed due to: " + status);
+		    }
+		  });
+			
 		});
 	  	
 	} else {

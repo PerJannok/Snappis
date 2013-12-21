@@ -167,22 +167,6 @@ function fillPlaceForm(results) {
 
 }
 
-
-function showYelp() {
-
-
-	var bounds = map.getBounds();
-	var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-	var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-	var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-	var se = new google.maps.LatLng(sw.lat(), ne.lng());
-	
-	document.getElementById("yelphref").href = "/locations/showyelp?ne_lat=" + ne.lat() + ";ne_lng=" + ne.lng() + ";sw_lat=" + sw.lat() + ";sw_lng=" + sw.lng();
-
-	document.getElementById("yelphref").click();
-	
-}
-
 function findMe() {
 	if(navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -287,39 +271,6 @@ function showMap(showLat,showLong,addMarker) {
 	map.setCenter(centrePoint);
 	map.setZoom(defaultZoom);
 
-	/*
-	//adds a marker when clicking in map
-	google.maps.event.addListener( map, "click", function( evt ) {
-		placeMarker(evt.latLng);		
-		var myLatLng = evt.latLng;
-      	var lat = myLatLng.lat();
-      	var lng = myLatLng.lng();
-      	var latlng = new google.maps.LatLng(lat, lng);
-
-		var centrePoint = new google.maps.LatLng(lat, lng);
-		map.setCenter(centrePoint);
-
-		document.getElementById("location_lat").value = lat;
-		document.getElementById("location_lng").value = lng;
-
-		latLng = new google.maps.LatLng(lat, lng);
-		geocoder.geocode( { 'latLng': latLng}, function(results, status) {
-			if (status == google.maps.GeocoderStatus.OK) {
-	  			if (results[0]) {
-	  			
-	  				//when clicking on map
-		  			fillPlaceForm(results[0]);
-	  			
-	  			}else{
-						alert('fel');
-					}
-			} else {
-	  			alert("Geocode was not successful for the following reason: " + status);
-			}
-		});	
-	});
-	*/
-
 	document.getElementById("location_lat").value = showLat;
 	document.getElementById("location_lng").value = showLong;
 
@@ -418,18 +369,6 @@ function showMap(showLat,showLong,addMarker) {
 		infowindow.setContent('<div><strong>' + place.name + '</strong> (rating: ' + place.rating + ')<br>' + address);
 		infowindow.open(map, marker);
 		
-		//all google places attributes
-		/*
-		var i = 1;
-		var str = '';
-		for (var key in place)
-		{
-    	str += "#: " + i + " key: " + key + " val: " + place[key] + "\n";
-    	i++;
-		}
-		alert(str);
-		*/
-		
 		document.getElementById("location_phone_number").value = place.formatted_phone_number;
 		document.getElementById("location_location_name").value = place.name;
 
@@ -448,15 +387,5 @@ function showMap(showLat,showLong,addMarker) {
 //-->
 </script>
 
-
-<a id="yelphref" href="" data-remote="true"></a>
-
-<!--
-<%= link_to "Show Yelp locations link", { :action => 'showyelp', :sw_lat => '39.900000', :sw_lng => '-122.500000', :ne_lat => '37.788022', :ne_lng => '-122.399797' }, :remote => true %>
--->
-
-<input type="button" value="Show Yelp locations" onclick="showYelp();" />
-
-<div id='yelpdiv'></div>
 
 <br />

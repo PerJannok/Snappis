@@ -297,6 +297,8 @@ class LocationsController < ApplicationController
   
   def add_review
   	puts "loc controller add_review"
+  	
+  	@searchterm = params[:searchterm]
 
 		if !params[:hidden_googleid].nil?
 	  	loc = Location.where(:googleid => params[:hidden_googleid])

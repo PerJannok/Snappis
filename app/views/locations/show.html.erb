@@ -111,14 +111,5 @@
     <span id="location_lng"><%= @location.lng %></span>
   </p>
 
-  <%= render :partial => "googlemap_show" %>
-  
-  <!-- only for cleanup -->
-  <!-- deletes location, including all ratings for that location -->
-  <!--
-  <%= form_for :rating, :method => :delete, :remote => true do |f| %>
-		<%= f.submit :value => "Delete" %>
-	<% end %>
-	-->
 	
 </div>
