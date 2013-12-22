@@ -118,6 +118,11 @@ if (!googleref || googleref.length == 0 || googleref==null || googleref == 'unde
   	if (status != google.maps.places.PlacesServiceStatus.OK) {
   	
   		//no google place found for search string!
+  		
+  		alert('SHOULD NOT REACH THIS POINT! <br>redirect should happen in controller<br>no google place found. seach in db!?<br> now just redirecting to add_review ...');
+  		
+  		//var dbLocation = '<%= @location.object_id %>';
+  		//alert(dbLocation);
   	
   		document.getElementById('resultsArea').innerHTML = '<form id="hiddenform" action="add_review" method="post" style="display:none;"><input id="searchterm" name="searchterm" type="hidden" value="<%= @searchterm %>"></form>';
   		document.forms['hiddenform'].submit();
