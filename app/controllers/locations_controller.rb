@@ -5,13 +5,13 @@ class LocationsController < ApplicationController
   # GET /locations.json
   def index
     #@locations = Location.order("id desc").page(params[:page]).per(50)
-    #@locations = Location.all
+    @locations = Location.all
     
     puts "loc controller index"
     
     respond_to do |format|
-      #format.html # index.html.erb
-      #format.json { render json: @locations }
+      format.html # index.html.erb
+      format.json { render json: @locations }
     end
   end
 
@@ -257,22 +257,22 @@ class LocationsController < ApplicationController
 #####################  	
 # should only be used as cleanup / administrative
 #####################  	
-#  	
-#  	location = Location.find(params[:id])
-#  	
-#  	if !location.nil?
-#	  	#puts location.location_name
-#			location.ratings.each do |rating|
-#				rating.destroy
-#				#puts rating.Cat1value
-#			end
-#		  location.destroy
-#    end
-#  	
-#  	respond_to do |format|
-#      format.html { redirect_to locations_url, notice: 'Location was successfully deleted.' }
-#      format.json { head :no_content }
-#    end
+  	
+  	location = Location.find(params[:id])
+  	
+  	if !location.nil?
+	  	#puts location.location_name
+			location.ratings.each do |rating|
+				rating.destroy
+				#puts rating.Cat1value
+			end
+		  location.destroy
+    end
+  	
+  	respond_to do |format|
+      format.html { redirect_to locations_url, notice: 'Location was successfully deleted.' }
+      format.json { head :no_content }
+    end
 
   end
   
@@ -396,8 +396,9 @@ class LocationsController < ApplicationController
 		puts "loc cntrl search result"
 
 		@searchterm = params[:location_search]
-
-		if params[:hidden_googlereference] == "" or params[:hidden_googlereference] == "undefined"
+		@googleref = params[:hidden_googlereference]
+		
+		if @googleref == "undefined"
 
 			loc = Location.where(:location_name => params[:location_search])
 			
@@ -421,11 +422,11 @@ class LocationsController < ApplicationController
 			end
 		
 		else
-			@googleref = params[:hidden_googlereference]
-
+			
 			respond_to do |format|
 				format.html # searchresult.html.erb
-			end		
+			end
+					
 		end
 
     
