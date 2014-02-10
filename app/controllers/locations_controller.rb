@@ -409,16 +409,13 @@ class LocationsController < ApplicationController
 				respond_to do |format|
 			    format.html { render :template => "locations/detail" }
 				end
-			end
-				puts "no rec in db"
+			else
+				puts "no rec in db, goolgeref: " + @googleref
 			end
 		
 		else
-			puts "found no record in db or googleref empty"
+			puts "googleref empty"
 			
-			respond_to do |format|
-				format.html
-			end
 		end
 							
   end
