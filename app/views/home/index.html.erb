@@ -53,7 +53,7 @@ var autocomplete = new google.maps.places.Autocomplete(input);
 google.maps.event.addListener(autocomplete, 'place_changed', function() {
               
 	place = autocomplete.getPlace();
-		
+	
 	var a = [];
 	a = document.getElementsByClassName("hidden_googleid");
 	for(i = 0;i < a.length; ++i) {

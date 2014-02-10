@@ -393,43 +393,34 @@ class LocationsController < ApplicationController
 	end
 	
   def searchresult
-		puts "loc cntrl search result"
 
 		@searchterm = params[:location_search]
 		@googleref = params[:hidden_googlereference]
 		
-		if @googleref == "undefined"
+		if !params[:hidden_googlereference].nil?
+			loc = Location.where(:googlereference => params[:hidden_googlereference])
 
-			loc = Location.where(:location_name => params[:location_search])
-			
 			if loc.any?
 				puts "found record in db"
 				@location = loc.first
 			
-				puts "redirect to details view" #and skip the search result view in between
+				#redirect to details view and skip the search result view in between
 			
 				respond_to do |format|
 			    format.html { render :template => "locations/detail" }
 				end
-			else
-				puts "found no record in db"
-			
-				@location = Location.new(:googleid => "", :googlereference => "", :yelpbusinessid => "")
-
-				respond_to do |format|
-					format.html { render :template => "locations/addreview" }
-				end
+			end
+				puts "no rec in db"
 			end
 		
 		else
+			puts "found no record in db or googleref empty"
 			
 			respond_to do |format|
-				format.html # searchresult.html.erb
+				format.html
 			end
-					
 		end
-
-    
+							
   end
   
 end
